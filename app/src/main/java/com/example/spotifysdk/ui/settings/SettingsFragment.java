@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 
 import com.example.spotifysdk.Editaccount;
 import com.example.spotifysdk.LoginActivity;
+import com.example.spotifysdk.MainActivity2;
 import com.example.spotifysdk.R;
 import com.example.spotifysdk.databinding.FragmentSettingsBinding;
 
@@ -97,8 +98,8 @@ public class SettingsFragment extends Fragment {
     }
 
     public void onSpotifyConnectClicked(View view) {
-
-        Navigation.findNavController(view).navigate(R.id.nav_account_info);
+        Intent intent = new Intent(getActivity(), MainActivity2.class);
+        startActivity(intent);
     }
 
     /*
