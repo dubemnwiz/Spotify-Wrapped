@@ -17,6 +17,10 @@
             android:exported="true">
         </activity>
         <activity
+            android:name=".MainActivity"
+            android:exported="true">
+        </activity>
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
@@ -27,6 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".LoginActivity2"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>
