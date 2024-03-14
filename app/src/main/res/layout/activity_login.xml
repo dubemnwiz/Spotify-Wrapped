@@ -22,9 +22,17 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="0dp"
                 android:src="@drawable/logo"
                 />
+
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="137dp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="90dp"
+                android:src="@drawable/wrapped" />
 
         </FrameLayout>
 
@@ -104,7 +112,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#267326"
+            android:backgroundTint="@color/black"
             android:paddingStart="30dp"
             android:textAllCaps="false"
             android:text="@string/register"
@@ -117,7 +125,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#267326"
+            android:backgroundTint="@color/black"
             android:paddingStart="30dp"
             android:textAllCaps="false"
             android:text="@string/existing_user_go_to_sign_in_page"
