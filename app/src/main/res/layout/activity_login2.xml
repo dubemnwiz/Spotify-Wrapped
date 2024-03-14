@@ -5,37 +5,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:padding="10dp"
+    android:padding="0dp"
     tools:context=".LoginActivity2">
-    <EditText
-        android:id="@+id/username1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/user_name"
-        android:layout_marginTop="50dp"/>
 
-    <EditText
-        android:id="@+id/password1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:layout_marginTop="50dp"
-        android:layout_below="@id/username1"
-        />
-    <Button
-        android:id="@+id/btnsignin1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_in"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/password1"/>
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/backbutton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/back"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/btnsignin1"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="273dp"
+            android:background="@drawable/blue_bg">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/logo"
+                />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="62dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginTop="36.7dp"
+            android:background="@drawable/blue_border_rounded_cornwe"
+            >
+
+            <EditText
+                android:id="@+id/username1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/user_name"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/white"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="62dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginTop="36.7dp"
+            android:background="@drawable/blue_border_rounded_cornwe"
+            >
+
+            <EditText
+                android:id="@+id/password1"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:layout_marginTop="12dp"
+                android:background="@color/white"
+                android:layout_marginBottom="12dp"
+                />
+
+        </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/btnsignin1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#267326"
+            android:paddingStart="30dp"
+            android:textAllCaps="false"
+            android:text="Sign in"
+            android:textColor="@color/white"
+            android:paddingEnd="30dp"/>
+
+        <Button
+            android:id="@+id/backbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#267326"
+            android:paddingStart="30dp"
+            android:textAllCaps="false"
+            android:text="Not registered? Sign up"
+            android:textColor="@color/white"
+            android:paddingEnd="30dp"/>
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>

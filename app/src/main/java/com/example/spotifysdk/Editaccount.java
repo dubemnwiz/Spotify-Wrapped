@@ -3,6 +3,7 @@ package com.example.spotifysdk;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,12 +11,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.example.spotifysdk.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationView;
 
 public class Editaccount extends AppCompatActivity {
     EditText username, password, repassword;
     Button insert, update, delete, view;
     DBHelper DB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +39,10 @@ public class Editaccount extends AppCompatActivity {
                 Navigation.findNavController(view).navigate(R.id.nav_slideshow);
             }
         }
-
         );
+
+
+
 
         username = findViewById(R.id.Editusername);
         password = findViewById(R.id.Editpassword);
@@ -108,10 +120,8 @@ public class Editaccount extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
+
+
 
 }
