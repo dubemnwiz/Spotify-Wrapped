@@ -1,5 +1,6 @@
 package com.example.spotifysdk;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
+import android.content.DialogInterface;
 import com.example.spotifysdk.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
@@ -83,13 +84,33 @@ public class Editaccount extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameTXT = username.getText().toString();
-                Boolean checkudeletedata = DB.deletedata(nameTXT);
-                if(checkudeletedata==true)
-                    Toast.makeText(Editaccount.this, "Entry Deleted", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(Editaccount.this, "Entry Not Deleted", Toast.LENGTH_SHORT).show();
-            }        });
+                AlertDialog.Builder builder = new AlertDialog.Builder(Editaccount.this);
+                builder.setTitle("Confirmation");
+                builder.setMessage("Are you sure you want to delete your account?");
+                builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String nameTXT = username.getText().toString();
+                        Boolean checkDeletedData = DB.deletedata(nameTXT);
+                        if (checkDeletedData) {
+                            Toast.makeText(Editaccount.this, "Account Deleted", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(Editaccount.this, LoginActivity.class); // Adjust LoginActivity to your actual login activity
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(Editaccount.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Do nothing or add logic to handle going back to the previous screen
+                    }
+                });
+                builder.show();
+            }
+        });
 
         // Set click listener for "View Data" button
         view.setOnClickListener(new View.OnClickListener() {
