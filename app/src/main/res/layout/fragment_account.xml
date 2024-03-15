@@ -1,90 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:background="@color/white"
     tools:context=".Editaccount">
 
-
-
-
-    <TextView
-        android:id="@+id/texttitle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Enter changes to account below"
-        android:textSize="20dp" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/Editusername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter New Username"
-        android:textSize="24dp"
-        android:layout_below="@+id/texttitle"
-        android:inputType="textPersonName"/>
-    <EditText
-        android:id="@+id/Editpassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter New Password"
-        android:textSize="24dp"
-        android:layout_below="@+id/Editusername"
-        android:inputType="textPersonName"/>
-    <EditText
-        android:id="@+id/Reeditpassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Re Enter New Password"
-        android:textSize="24dp"
-        android:layout_below="@+id/Editpassword"
-        android:inputType="textPersonName"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnInsert"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Reeditpassword"
-        android:layout_marginTop="30dp"
-        android:text="Insert New Data"
-        android:textSize="24dp"
-        android:visibility="gone" />
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                app:srcCompat="@mipmap/ic_launcher_round"
+                >
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnInsert"
-        android:text="Update Account"
-        android:textSize="24sp" />
+            </ImageView>
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnUpdate"
-        android:text="Delete Account"
-        android:textSize="24sp" />
+            <TextView
+                android:id="@+id/settings_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Android Studio"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                >
 
-    <Button
-        android:id="@+id/btnView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnDelete"
-        android:text="View Data"
-        android:textSize="24sp"
-        android:visibility="gone" />
+            </TextView>
 
-    <Button
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnView"
-        android:layout_marginTop="70dp"
-        android:text="Back" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="androidstudio@android.com"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                >
+
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:padding="15dp"
+                >
+
+                <TextView
+                    android:id="@+id/texttitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Enter changes to account below"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:id="@+id/Editusername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter New Username"
+                    android:textSize="24dp"
+                    android:layout_below="@+id/texttitle"
+                    android:inputType="textPersonName"/>
+                <EditText
+                    android:id="@+id/Editpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter New Password"
+                    android:textSize="24dp"
+                    android:layout_below="@+id/Editusername"
+                    android:inputType="textPersonName"/>
+                <EditText
+                    android:id="@+id/Reeditpassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Re-enter New Password"
+                    android:textSize="24dp"
+                    android:layout_below="@+id/Editpassword"
+                    android:inputType="textPersonName"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnInsert"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:text="Insert New Data"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnUpdate"
+                android:layout_marginTop="40dp"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="50dp"
+                android:layout_below="@id/btnInsert"
+                android:text="Update Account"
+                android:background="@drawable/blue_border_rounded_cornwe"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:backgroundTint="#ff0000"
+                    android:text="Delete Account"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+
+
+            <Button
+                android:id="@+id/btnView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnDelete"
+                android:textColor="@color/white"
+
+                android:text="View Data"
+                android:textSize="24sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/backBtn"
+                android:background="@drawable/blue_border_rounded_cornwe"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_below="@+id/btnView"
+                android:textColor="@color/white"
+
+                android:layout_marginTop="70dp"
+                android:text="Back" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
 </RelativeLayout>

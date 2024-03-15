@@ -128,7 +128,7 @@
             android:backgroundTint="@color/black"
             android:paddingStart="30dp"
             android:textAllCaps="false"
-            android:text="@string/existing_user_go_to_sign_in_page"
+            android:text="Already have an account? Sign in"
             android:textColor="@color/white"
             android:paddingEnd="30dp"/>
 
