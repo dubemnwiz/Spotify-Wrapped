@@ -22,6 +22,7 @@
         <Button
             android:id="@+id/token_btn"
             android:layout_width="match_parent"
+            android:textColor="@color/white"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Request Token" />
@@ -35,6 +36,7 @@
 
         <Button
             android:id="@+id/code_btn"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -54,12 +56,24 @@
             <Button
                 android:id="@+id/profile_btn"
                 android:layout_width="0dp"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:text="Get User Profile" />
+
+            <Button
+                android:id="@+id/backBtnSpotify"
+                android:layout_marginTop="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Back"
+                android:textColor="@color/white" />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
