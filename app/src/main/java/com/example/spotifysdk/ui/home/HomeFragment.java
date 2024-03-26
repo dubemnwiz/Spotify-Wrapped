@@ -38,7 +38,14 @@ public class HomeFragment extends Fragment {
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
 
         homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        tabLayout.addTab(tabLayout.newTab().setText("Overview"));
+        TabLayout.Tab tab = tabLayout.newTab();
+        tab.setText("Overview");
+        tabLayout.addTab(tab);
+        tab.select();
+        View tabContentView = inflater.inflate(tabLayouts[0], container, false);
+        ViewGroup contentContainer = root.findViewById(R.id.content_container);
+        contentContainer.addView(tabContentView);
+        //tabLayout.addTab(tabLayout.newTab().setText("Overview"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Artist"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Songs"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Genres"));
