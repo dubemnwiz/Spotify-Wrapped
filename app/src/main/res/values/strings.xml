@@ -66,4 +66,5 @@
     <string name="existing_user_go_to_sign_in_page">Existing User! Go to Sign In Page</string>
     <string name="sign_in">Sign In</string>
     <string name="back">Back</string>
+    <string name="wrapped">Wrapped</string>
 </resources>

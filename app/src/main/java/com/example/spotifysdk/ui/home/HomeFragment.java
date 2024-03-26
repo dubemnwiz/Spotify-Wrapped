@@ -32,12 +32,12 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHome;
+        //final TextView textView = binding.textHome;
 
         ViewPager viewPager = root.findViewById(R.id.view_pager);
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
 
-        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         TabLayout.Tab tab = tabLayout.newTab();
         tab.setText("Overview");
         tabLayout.addTab(tab);
