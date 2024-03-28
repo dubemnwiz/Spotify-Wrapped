@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/primary"
     android:orientation="vertical"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".ui.settings.SettingsFragment"
+    style="@style/SCREEN">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,6 +44,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="22sp"
                 android:textStyle="bold"
+                style="@style/TEXT"
                 >
 
             </TextView>
@@ -54,6 +56,7 @@
                 android:textColor="#CCFFFFFF"
                 android:textSize="12sp"
                 android:layout_gravity="center"
+                style="@style/TEXT"
                 >
 
             </TextView>
@@ -113,6 +116,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_toEndOf="@+id/spotifyConnect"
+                        style="@style/TEXT"
                         >
                     </TextView>
                     <ImageView
@@ -156,6 +160,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_toEndOf="@+id/nightModeIcon"
+                        style="@style/TEXT"
                         >
                     </TextView>
                     <androidx.appcompat.widget.SwitchCompat
@@ -256,6 +261,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_toEndOf="@+id/sendMessage"
+                    style="@style/TEXT"
                     >
                 </TextView>
                 <ImageView
@@ -299,6 +305,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_toEndOf="@+id/aboutUs"
+                    style="@style/TEXT"
                     >
                 </TextView>
                 <ImageView
@@ -341,6 +348,7 @@
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_toEndOf="@+id/FAQs"
+                    style="@style/TEXT"
                     >
                 </TextView>
                 <ImageView
@@ -399,6 +407,7 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:layout_toEndOf="@+id/logout"
+                        style="@style/TEXT"
                         >
                     </TextView>
                     <ImageView
@@ -434,7 +443,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TEXT"/>
 
 
     <Button

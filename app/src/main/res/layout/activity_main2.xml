@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_main2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity2">
@@ -22,10 +22,9 @@
         <Button
             android:id="@+id/token_btn"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Request Token"
+            android:text="Login To Spotify"
             android:textColor="@color/white"/>
 
         <TextView
@@ -64,7 +63,7 @@
                 android:layout_margin="8dp"
                 android:layout_weight="1"
                 android:textColor="@color/white"
-                android:text="Get User Profile" />
+                android:text="Go To Profile" />
 
             <Button
                 android:id="@+id/backBtnSpotify"
