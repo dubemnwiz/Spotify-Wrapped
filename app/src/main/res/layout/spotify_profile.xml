@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/spotifyGreen">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/backBtnProfile"
+            android:layout_width="109dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="28dp"
+            android:layout_marginEnd="274dp"
+            android:layout_marginBottom="27dp"
+            android:text="BACK"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="57dp"
+            android:layout_marginTop="61dp"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/display_name"
+            android:layout_width="128dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="39dp"
+            android:layout_marginTop="97dp"
+            android:layout_marginEnd="62dp"
+            android:layout_toEndOf="@+id/profile_pic"
+            android:text="User"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/followers"
+            android:layout_width="129dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="39dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginBottom="598dp"
+            android:layout_toEndOf="@+id/profile_pic"
+            android:text="Followers"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout3"
+            android:layout_width="377dp"
+            android:layout_height="80dp"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="42dp">
+
+            <TextView
+                android:id="@+id/playlist_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="194dp"
+                android:layout_marginBottom="32dp"
+                android:text="TextView"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/playlist_img1"
+                android:layout_width="102dp"
+                android:layout_height="80dp"
+                tools:src="@tools:sample/avatars" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="377dp"
+            android:layout_height="80dp"
+            android:layout_above="@+id/relativeLayout2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="42dp">
+
+            <TextView
+                android:id="@+id/playlist_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="194dp"
+                android:layout_marginBottom="32dp"
+                android:text="TextView"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/playlist_img2"
+                android:layout_width="102dp"
+                android:layout_height="80dp"
+                tools:src="@tools:sample/avatars" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="377dp"
+            android:layout_height="80dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="122dp">
+
+            <TextView
+                android:id="@+id/playlist_name3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="194dp"
+                android:layout_marginBottom="32dp"
+                android:text="TextView"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/playlist_img3"
+                android:layout_width="102dp"
+                android:layout_height="80dp"
+                tools:src="@tools:sample/avatars" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/playlist_text"
+            android:layout_width="99dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/relativeLayout3"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="34dp"
+            android:layout_marginEnd="278dp"
+            android:layout_marginBottom="34dp"
+            android:text="Playlists"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
