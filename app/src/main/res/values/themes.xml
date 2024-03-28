@@ -42,28 +42,14 @@
     </style>
 
     <!-- Light Theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    <!-- Screen background if light mode on -->
+    <style name="SCREEN">
+        <item name="android:background">#FFFFFF</item>
     </style>
 
-    <!-- Dark Theme -->
-    <style name="AppTheme.Dark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/black</item>
-
-        <item name="android:background">@color/black</item>
-        <item name="cardBackgroundColor">@color/black</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:colorButtonNormal">@color/black</item>
+    <!-- Text background if light mode on -->
+    <style name="TEXT">
+        <item name="android:textColor">#000000</item>
     </style>
 
 </resources>
