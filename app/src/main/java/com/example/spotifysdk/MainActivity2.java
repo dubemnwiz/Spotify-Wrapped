@@ -118,7 +118,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
             mAccessToken = response.getAccessToken();
-            setTextAsync(mAccessToken, tokenTextView);
+            setTextAsync(successfulLogin, tokenTextView);
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
@@ -137,13 +137,19 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
         // Create a request to get the user profile
-        final Request request = new Request.Builder()
+        final Request profileRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
+        // Create a request to get the user's playlists
+        final Request playlistsRequest = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/playlists")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
         cancelCall();
-        mCall = mOkHttpClient.newCall(request);
+        mCall = mOkHttpClient.newCall(profileRequest);
 
         mCall.enqueue(new Callback() {
             @Override
@@ -158,7 +164,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     profileData = jsonObject.toString();
-                    startNewActivity(profileData);
+                    fetchPlaylists(playlistsRequest, profileData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -168,10 +174,36 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    private void startNewActivity(String data) {
-        // Start new activity and pass stored data to it
+    private void fetchPlaylists(Request request, final String profileData) {
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch playlists: " + e);
+                Toast.makeText(MainActivity2.this, "Failed to fetch playlists, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject playlistsJsonObject = new JSONObject(response.body().string());
+                    final String playlistsData = playlistsJsonObject.toString();
+                    startNewActivity(profileData, playlistsData);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse playlists data: " + e);
+                    //Toast.makeText(MainActivity2.this, "Failed to parse playlists data, watch Logcat for more details",
+                           // Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void startNewActivity(String data, String playlistsData) {
         Intent intent = new Intent(MainActivity2.this, SpotifyProfile.class);
-        intent.putExtra("data", data); // Pass data to new activity
+        intent.putExtra("data", data);
+        intent.putExtra("playlistsData", playlistsData);
         startActivity(intent);
     }
 
@@ -195,7 +227,7 @@ public class MainActivity2 extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email" }) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "playlist-read-private"}) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

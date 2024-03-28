@@ -45,7 +45,8 @@
             android:layout_marginEnd="62dp"
             android:layout_toEndOf="@+id/profile_pic"
             android:text="User"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/followers"
@@ -58,7 +59,8 @@
             android:layout_marginBottom="598dp"
             android:layout_toEndOf="@+id/profile_pic"
             android:text="Followers"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout3"
@@ -73,14 +75,15 @@
 
             <TextView
                 android:id="@+id/playlist_name1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="194dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="59dp"
+                android:layout_marginBottom="34dp"
                 android:text="TextView"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/playlist_img1"
@@ -102,14 +105,15 @@
 
             <TextView
                 android:id="@+id/playlist_name2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="194dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="59dp"
+                android:layout_marginBottom="34dp"
                 android:text="TextView"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/playlist_img2"
@@ -131,14 +135,15 @@
 
             <TextView
                 android:id="@+id/playlist_name3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="20dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="194dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="59dp"
+                android:layout_marginBottom="38dp"
                 android:text="TextView"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/playlist_img3"
