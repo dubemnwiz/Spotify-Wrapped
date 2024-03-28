@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.spotifysdk.ui.settings.SettingsFragment;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -38,9 +37,6 @@ public class MainActivity2 extends AppCompatActivity {
     private String mAccessToken, mAccessCode;
     private Call mCall;
 
-    private String profileData;
-    private String successfulLogin = "Successfully connected to Spotify!";
-
     private TextView tokenTextView, codeTextView, profileTextView;
 
     @Override
@@ -57,7 +53,6 @@ public class MainActivity2 extends AppCompatActivity {
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
-        Button back = findViewById(R.id.backBtnSpotify);
 
         // Set the click listeners for the buttons
 
@@ -73,10 +68,11 @@ public class MainActivity2 extends AppCompatActivity {
             onGetUserProfileClicked();
         });
 
+        Button back = findViewById(R.id.backBtnSpotify);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SettingsFragment.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -132,7 +128,7 @@ public class MainActivity2 extends AppCompatActivity {
      */
     public void onGetUserProfileClicked() {
         if (mAccessToken == null) {
-            Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -157,8 +153,7 @@ public class MainActivity2 extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
-                    profileData = jsonObject.toString();
-                    startNewActivity(profileData);
+                    setTextAsync(jsonObject.toString(3), profileTextView);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -166,13 +161,6 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void startNewActivity(String data) {
-        // Start new activity and pass stored data to it
-        Intent intent = new Intent(MainActivity2.this, SpotifyProfile.class);
-        intent.putExtra("data", data); // Pass data to new activity
-        startActivity(intent);
     }
 
     /**
@@ -205,7 +193,9 @@ public class MainActivity2 extends AppCompatActivity {
      *
      * @return redirect Uri object
      */
-    private Uri getRedirectUri() { return Uri.parse(REDIRECT_URI); }
+    private Uri getRedirectUri() {
+        return Uri.parse(REDIRECT_URI);
+    }
 
     private void cancelCall() {
         if (mCall != null) {
