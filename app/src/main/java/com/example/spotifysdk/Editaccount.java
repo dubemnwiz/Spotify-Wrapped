@@ -3,10 +3,13 @@ package com.example.spotifysdk;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,12 +22,15 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import android.content.DialogInterface;
+import android.widget.ToggleButton;
+
 import com.example.spotifysdk.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
 public class Editaccount extends AppCompatActivity {
     EditText username, password, repassword;
     Button insert, update, delete, view;
+    ToggleButton togglePasswordVisibility, toggleRepasswordVisibility;
     DBHelper DB;
 
 
@@ -35,11 +41,11 @@ public class Editaccount extends AppCompatActivity {
 
         Button back = findViewById(R.id.backBtn);
         back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.nav_slideshow);
-            }
-        }
+                                    @Override
+                                    public void onClick(View view) {
+                                        Navigation.findNavController(view).navigate(R.id.nav_slideshow);
+                                    }
+                                }
         );
 
 
@@ -52,6 +58,10 @@ public class Editaccount extends AppCompatActivity {
         update = findViewById(R.id.btnUpdate);
         delete = findViewById(R.id.btnDelete);
         view = findViewById(R.id.btnView);
+
+        togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
+        toggleRepasswordVisibility = findViewById(R.id.toggleRepasswordVisibility);
+
         DB = new DBHelper(this);
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,9 +150,38 @@ public class Editaccount extends AppCompatActivity {
             }
         });
 
+        // Set click listener for togglePasswordVisibility
+        togglePasswordVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Toggle password visibility
+                if (isChecked) {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                // Move cursor to the end of the text
+                password.setSelection(password.getText().length());
+            }
+        });
+
+
+        // Set click listener for toggleRepasswordVisibility
+        toggleRepasswordVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Toggle repassword visibility
+                if (isChecked) {
+                    repassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    repassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                // Move cursor to the end of the text
+                repassword.setSelection(repassword.getText().length());
+            }
+        });
+
+
 
     }
-
-
-
 }
