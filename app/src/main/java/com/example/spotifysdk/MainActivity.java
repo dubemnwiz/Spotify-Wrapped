@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,12 +21,16 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.spotifysdk.databinding.ActivityMainBinding;
+import com.example.spotifysdk.ui.home.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        topartist_name = (TextView) findViewById(R.id.textView2);
+        topartist_image = findViewById(R.id.topartist_image);
+
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;
@@ -62,32 +70,39 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Top Artist Page
-        topartist_name = (TextView) findViewById(R.id.textView2);
-        topartist_image = (ImageView) findViewById(R.id.topartist_image);
+
+
+        String topArtistsData = getIntent().getStringExtra("topArtists");
 
         try {
-            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("topArtists"));
-
+            JSONObject jsonObj = new JSONObject(topArtistsData);
             JSONArray itemsArray = jsonObj.getJSONArray("items");
 
-            /** Display top 3 playlists
-             *
-             */
             if (itemsArray != null && itemsArray.length() > 0) {
                 JSONObject topArtistObject = itemsArray.getJSONObject(0);
                 String topArtistName = topArtistObject.getString("name");
+                Log.d("JSON", "Top Artist: " + topArtistName);
                 topartist_name.setText(topArtistName);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("topArtistName", topArtistName);
+
+                HomeFragment homeFragment = new HomeFragment();
+                homeFragment.setArguments(bundle);
 
                 JSONArray topArtistImagesArray = topArtistObject.getJSONArray("images");
                 if (topArtistImagesArray != null && topArtistImagesArray.length() > 0) {
                     JSONObject topArtistImageObject = topArtistImagesArray.getJSONObject(0);
                     String topArtistImageUrl = topArtistImageObject.getString("url");
                     loadImageFromUrl(topArtistImageUrl, topartist_image);
+                    Log.d("JSON", "Image: " + topArtistImageUrl);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
 
@@ -134,5 +149,57 @@ public class MainActivity extends AppCompatActivity {
     }
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
+    }
+    public String fetchTopArtist() {
+        String topArtistName = null;
+        try {
+            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+
+            /** Display top 3 playlists */
+            if (itemsArray != null && itemsArray.length() > 0) {
+                JSONObject topArtistObject = itemsArray.getJSONObject(0);
+                topArtistName = topArtistObject.getString("name");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topArtistName;
+    }
+    public String fetchTopArtistImage() {
+        String topArtistImageUrl = null;
+        try {
+            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+
+            if (itemsArray != null && itemsArray.length() > 0) {
+                JSONObject topArtistObject = itemsArray.getJSONObject(0);
+                JSONArray topArtistImagesArray = topArtistObject.getJSONArray("images");
+                if (topArtistImagesArray.length() > 0) {
+                    JSONObject topArtistImageObject = topArtistImagesArray.getJSONObject(0);
+                    topArtistImageUrl = topArtistImageObject.getString("url");
+                    Log.d("JSON", "Image: " + topArtistImageUrl);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return topArtistImageUrl;
+    }
+
+    public List<String> parseTop5Songs() {
+        List<String> topSongs = new ArrayList<>();
+        try {
+            JSONObject tracksData = new JSONObject(getIntent().getStringExtra("topTracks"));
+            JSONArray itemsArray = tracksData.getJSONArray("items");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject trackObject = itemsArray.getJSONObject(i);
+                String trackName = trackObject.getString("name");
+                topSongs.add(trackName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topSongs;
     }
 }

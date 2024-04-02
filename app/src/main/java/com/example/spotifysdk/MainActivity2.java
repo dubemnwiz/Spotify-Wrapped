@@ -76,8 +76,13 @@ public class MainActivity2 extends AppCompatActivity {
             onGetUserProfileClicked();
         });
 
-        loadBtn.setOnClickListener((v) -> {
-            onLoadDataClicked();
+        loadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onLoadDataClicked();
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
 
         back.setOnClickListener(new View.OnClickListener() {

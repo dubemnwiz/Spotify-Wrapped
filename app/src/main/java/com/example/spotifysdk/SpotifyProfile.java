@@ -20,7 +20,7 @@ import org.w3c.dom.Text;
 public class SpotifyProfile extends AppCompatActivity {
 
     //Declaring the TextViews and ImageViews
-    private TextView displayName, followerCount, playlistName1, playlistName2, playlistName3;
+    private TextView displayName, followerCount, playlistName1, playlistName2, playlistName3, testname;
     private ImageView profilePic, playlistPic1, playlistPic2, playlistPic3;
 
     @Override
