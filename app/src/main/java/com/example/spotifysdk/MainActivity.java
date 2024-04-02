@@ -64,6 +64,30 @@ public class MainActivity extends AppCompatActivity {
         //Top Artist Page
         topartist_name = (TextView) findViewById(R.id.textView2);
         topartist_image = (ImageView) findViewById(R.id.topartist_image);
+
+        try {
+            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("topArtists"));
+
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+
+            /** Display top 3 playlists
+             *
+             */
+            if (itemsArray != null && itemsArray.length() > 0) {
+                JSONObject topArtistObject = itemsArray.getJSONObject(0);
+                String topArtistName = topArtistObject.getString("name");
+                topartist_name.setText(topArtistName);
+
+                JSONArray topArtistImagesArray = topArtistObject.getJSONArray("images");
+                if (topArtistImagesArray != null && topArtistImagesArray.length() > 0) {
+                    JSONObject topArtistImageObject = topArtistImagesArray.getJSONObject(0);
+                    String topArtistImageUrl = topArtistImageObject.getString("url");
+                    loadImageFromUrl(topArtistImageUrl, topartist_image);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

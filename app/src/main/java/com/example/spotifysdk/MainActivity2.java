@@ -228,10 +228,16 @@ public class MainActivity2 extends AppCompatActivity {
                     fetchPlaylists(playlistsRequest, profileData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+                    MainActivity2.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
+
         });
     }
 
