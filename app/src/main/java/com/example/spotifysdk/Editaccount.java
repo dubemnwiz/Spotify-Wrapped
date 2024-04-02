@@ -1,16 +1,12 @@
 package com.example.spotifysdk;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,8 +19,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import android.content.DialogInterface;
-import android.widget.ToggleButton;
-
 import com.example.spotifysdk.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
@@ -32,26 +26,20 @@ public class Editaccount extends AppCompatActivity {
     EditText username, password, repassword;
     Button insert, update, delete, view;
     DBHelper DB;
-    ToggleButton togglePasswordVisibility, toggleRepasswordVisibility;
 
 
-
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_account); // Change this line to use fragment_account.xml
 
         Button back = findViewById(R.id.backBtn);
-
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.nav_slideshow);
             }
         }
-
-
         );
 
 
@@ -64,10 +52,6 @@ public class Editaccount extends AppCompatActivity {
         update = findViewById(R.id.btnUpdate);
         delete = findViewById(R.id.btnDelete);
         view = findViewById(R.id.btnView);
-
-        togglePasswordVisibility = findViewById(R.id.togglePasswordVisibility);
-        toggleRepasswordVisibility = findViewById(R.id.toggleRepasswordVisibility);
-
         DB = new DBHelper(this);
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +94,9 @@ public class Editaccount extends AppCompatActivity {
                         Boolean checkDeletedData = DB.deletedata(nameTXT);
                         if (checkDeletedData) {
                             Toast.makeText(Editaccount.this, "Account Deleted", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Editaccount.this, LoginActivity.class);
+                            Intent intent = new Intent(Editaccount.this, LoginActivity.class); // Adjust LoginActivity to your actual login activity
                             startActivity(intent);
-                            finish();  // Close the current activity to prevent going back to it
+                            finish();
                         } else {
                             Toast.makeText(Editaccount.this, "Failed to delete account", Toast.LENGTH_SHORT).show();
                         }
@@ -121,12 +105,11 @@ public class Editaccount extends AppCompatActivity {
                 builder.setNegativeButton("Back", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        // Do nothing or add logic to handle staying on the current screen
+                        // Do nothing or add logic to handle going back to the previous screen
                     }
                 });
                 builder.show();
             }
-
         });
 
         // Set click listener for "View Data" button
@@ -157,36 +140,9 @@ public class Editaccount extends AppCompatActivity {
             }
         });
 
-        // Set click listener for togglePasswordVisibility
-        togglePasswordVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Toggle password visibility
-                if (isChecked) {
-                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-                // Move cursor to the end of the text
-                password.setSelection(password.getText().length());
-            }
-        });
-
-
-        // Set click listener for toggleRepasswordVisibility
-        toggleRepasswordVisibility.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Toggle repassword visibility
-                if (isChecked) {
-                    repassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    repassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
-                // Move cursor to the end of the text
-                repassword.setSelection(repassword.getText().length());
-            }
-        });
 
     }
+
+
+
 }

@@ -7,48 +7,15 @@
     android:padding="10dp"
     android:background="@color/white"
     tools:context=".Editaccount">
-<<<<<<< Updated upstream
 
     <ScrollView
-=======
-    
-    <TextView
-        android:id="@+id/texttitle"
->>>>>>> Stashed changes
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-<<<<<<< Updated upstream
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-=======
-    <EditText
-        android:id="@+id/Editusername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter New Username"
-        android:textSize="24dp"
-        android:layout_below="@+id/texttitle"
-        android:inputType="textPersonName"/>
-    <EditText
-        android:id="@+id/Editpassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter New Password"
-        android:textSize="24dp"
-        android:layout_below="@+id/Editusername"
-        android:inputType="textPassword"/>
-    <EditText
-        android:id="@+id/Reeditpassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Re Enter New Password"
-        android:textSize="24dp"
-        android:layout_below="@+id/Editpassword"
-        android:inputType="textPassword"/>
->>>>>>> Stashed changes
 
             <ImageView
                 android:layout_width="100dp"
@@ -193,64 +160,4 @@
     </ScrollView>
 
 
-<<<<<<< Updated upstream
-=======
-    <Button
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnView"
-        android:layout_marginTop="70dp"
-        android:text="Back" />
-
-    <TextView
-        android:id="@+id/button_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Password"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:layout_centerVertical="true"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
-
-    <ImageButton
-        android:id="@+id/button_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackground"
-        android:padding="8dp"
-        android:src="@drawable/ic_visibility_off"/>
-
-
-
-    <!-- Toggle buttons to show/hide password -->
-
-    <ToggleButton
-        android:id="@+id/togglePasswordVisibility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/Reeditpassword"
-        android:layout_marginTop="118dp"
-        android:checked="false"
-        android:textOff="Show Password"
-        android:textOn="Hide Password" />
-
-    <ToggleButton
-        android:id="@+id/toggleRepasswordVisibility"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/togglePasswordVisibility"
-        android:layout_marginTop="180dp"
-        android:checked="false"
-        android:textOff="Hide Re-entered Password"
-        android:textOn="Show Re-entered Password"
-        android:visibility="gone" />
-
-
->>>>>>> Stashed changes
 </RelativeLayout>

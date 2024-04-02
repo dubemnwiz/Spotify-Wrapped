@@ -53,8 +53,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
     //new
-
-    public Boolean updateuserdata(String username, String password) {
+    public Boolean updateuserdata(String username, String password)
+    {
         SQLiteDatabase DB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("username", username);
