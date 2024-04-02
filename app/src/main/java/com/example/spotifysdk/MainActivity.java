@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -19,6 +21,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.spotifysdk.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-
+    private TextView topartist_name, playlistName1, playlistName2, playlistName3;
+    private ImageView topartist_image, playlistPic1, playlistPic2, playlistPic3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,30 +61,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        switcher = findViewById(R.id.switchDarkMode);
-
-        //we use sharedPreferences to save mode even if app is exited
-        sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE);
-        nightMode = sharedPreferences.getBoolean("night", false); // light mode is the default mode
-
-        if (nightMode) {
-            switcher.setChecked(true);
-        }
-        /* switcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (nightMode) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("night", false);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("night", true);
-                }
-            }
-        }); */
+        //Top Artist Page
+        topartist_name = (TextView) findViewById(R.id.textView2);
+        topartist_image = (ImageView) findViewById(R.id.topartist_image);
     }
 
 
@@ -120,5 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Recreate the activity to apply the theme changes
         recreate();
+    }
+    private void loadImageFromUrl(String imageUrl, ImageView view) {
+        Picasso.get().load(imageUrl).into(view);
     }
 }

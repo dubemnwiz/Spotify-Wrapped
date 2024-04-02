@@ -205,6 +205,8 @@ public class MainActivity2 extends AppCompatActivity {
         intent.putExtra("data", data);
         intent.putExtra("playlistsData", playlistsData);
         startActivity(intent);
+        Intent intent2 = new Intent(MainActivity2.this, MainActivity.class);
+        intent.putExtra("data2", data);
     }
 
     /**
