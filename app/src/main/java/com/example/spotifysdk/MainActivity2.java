@@ -170,8 +170,8 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    artistsData = jsonObject.toString();
+                    final JSONObject artistJsonObject = new JSONObject(response.body().string());
+                    artistsData = artistJsonObject.toString();
                     fetchTracks(topTracks, artistsData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -287,8 +287,8 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
-                    tracksData = jsonObject.toString();
+                    final JSONObject tracksJsonObject = new JSONObject(response.body().string());
+                    tracksData = tracksJsonObject.toString();
                     startMainActivity(artistsData, tracksData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
