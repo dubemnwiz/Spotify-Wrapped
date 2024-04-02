@@ -39,6 +39,8 @@ public class MainActivity2 extends AppCompatActivity {
     private Call mCall;
 
     private String profileData;
+    private String artistsData;
+    private String tracksData;
     private String successfulLogin = "Successfully connected to Spotify!";
 
     private TextView tokenTextView, codeTextView, profileTextView;
@@ -58,6 +60,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button codeBtn = (Button) findViewById(R.id.code_btn);
         Button profileBtn = (Button) findViewById(R.id.profile_btn);
         Button back = findViewById(R.id.backBtnSpotify);
+        Button loadBtn = (Button) findViewById((R.id.load_top_data));
 
         // Set the click listeners for the buttons
 
@@ -71,6 +74,10 @@ public class MainActivity2 extends AppCompatActivity {
 
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
+        });
+
+        loadBtn.setOnClickListener((v) -> {
+            onLoadDataClicked();
         });
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +134,57 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     /**
+     * Get user top data
+     * This method will get the user top data using the token
+     */
+    public void onLoadDataClicked() {
+        if (mAccessToken == null) {
+            Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // Create a request to get the user's top artists
+        final Request topArtists = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/artists")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        // Create a request to get the user's top tracks
+        final Request topTracks = new Request.Builder()
+                .url("https://api.spotify.com/v1/me/top/tracks")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+        cancelCall();
+        mCall = mOkHttpClient.newCall(topArtists);
+
+        /**
+         * Making API call for top artists
+         */
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity2.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    artistsData = jsonObject.toString();
+                    fetchTracks(topTracks, artistsData);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+
+    /**
      * Get user profile
      * This method will get the user profile using the token
      */
@@ -136,7 +194,7 @@ public class MainActivity2 extends AppCompatActivity {
             return;
         }
 
-        // Create a request to get the user profile
+        // Create a request to get the user profileBtn
         final Request profileRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
@@ -151,6 +209,9 @@ public class MainActivity2 extends AppCompatActivity {
         cancelCall();
         mCall = mOkHttpClient.newCall(profileRequest);
 
+        /**
+         * Making API call for profile data
+         */
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -174,6 +235,10 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get user playlists
+     * This method will get the user's playlists using the token
+     */
     private void fetchPlaylists(Request request, final String profileData) {
         mCall = mOkHttpClient.newCall(request);
 
@@ -193,20 +258,63 @@ public class MainActivity2 extends AppCompatActivity {
                     startNewActivity(profileData, playlistsData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse playlists data: " + e);
-                    //Toast.makeText(MainActivity2.this, "Failed to parse playlists data, watch Logcat for more details",
-                           // Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
+    /**
+     * Get user top tracks
+     * This method will get the user's top tracks using the token
+     */
+    private void fetchTracks(Request request, final String artistsData) {
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity2.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    tracksData = jsonObject.toString();
+                    startMainActivity(artistsData, tracksData);
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Starts the profile view activity
+     * Puts the data from the API calls into the profile activity for parsing
+     * The JSON is currently in the form of a String (Not JSONObject)
+     */
     private void startNewActivity(String data, String playlistsData) {
         Intent intent = new Intent(MainActivity2.this, SpotifyProfile.class);
         intent.putExtra("data", data);
         intent.putExtra("playlistsData", playlistsData);
         startActivity(intent);
-        Intent intent2 = new Intent(MainActivity2.this, MainActivity.class);
-        intent.putExtra("data2", data);
+    }
+
+    /**
+     * Starts the profile view activity
+     * Puts the data from the API calls into the profile activity for parsing
+     * The JSON is currently in the form of a String (Not JSONObject)
+     */
+    private void startMainActivity(String artistsData, String tracksData) {
+        Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+        intent.putExtra("topArtists", artistsData);
+        intent.putExtra("topTracks", tracksData);
+        startActivity(intent);
     }
 
     /**
@@ -229,7 +337,7 @@ public class MainActivity2 extends AppCompatActivity {
     private AuthorizationRequest getAuthenticationRequest(AuthorizationResponse.Type type) {
         return new AuthorizationRequest.Builder(CLIENT_ID, type, getRedirectUri().toString())
                 .setShowDialog(false)
-                .setScopes(new String[] { "user-read-email", "playlist-read-private"}) // <--- Change the scope of your requested token here
+                .setScopes(new String[] { "user-read-email", "playlist-read-private", "user-top-read"}) // <--- Change the scope of your requested token here
                 .setCampaign("your-campaign-token")
                 .build();
     }

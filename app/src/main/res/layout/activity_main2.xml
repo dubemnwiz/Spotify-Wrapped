@@ -77,6 +77,13 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/load_top_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Load Top Data"
+            android:textColor="#FFFFFF" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

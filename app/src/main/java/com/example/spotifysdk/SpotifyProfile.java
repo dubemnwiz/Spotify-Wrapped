@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 
 public class SpotifyProfile extends AppCompatActivity {
 
+    //Declaring the TextViews and ImageViews
     private TextView displayName, followerCount, playlistName1, playlistName2, playlistName3;
     private ImageView profilePic, playlistPic1, playlistPic2, playlistPic3;
 
@@ -27,24 +28,30 @@ public class SpotifyProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.spotify_profile);
 
-        // Initialize the views
-        displayName = (TextView) findViewById(R.id.display_name);
-        followerCount = (TextView) findViewById(R.id.followers);
-        profilePic = (ImageView) findViewById(R.id.profile_pic);
+        // Initializing the views
+        displayName = findViewById(R.id.display_name);
+        followerCount = findViewById(R.id.followers);
+        profilePic = findViewById(R.id.profile_pic);
 
-        playlistPic1 = (ImageView) findViewById(R.id.playlist_img1);
-        playlistPic2 = (ImageView) findViewById(R.id.playlist_img2);
-        playlistPic3 = (ImageView) findViewById(R.id.playlist_img3);
+        playlistPic1 = findViewById(R.id.playlist_img1);
+        playlistPic2 = findViewById(R.id.playlist_img2);
+        playlistPic3 = findViewById(R.id.playlist_img3);
 
-        playlistName1 = (TextView) findViewById(R.id.playlist_name1);
-        playlistName2 = (TextView) findViewById(R.id.playlist_name2);
-        playlistName3 = (TextView) findViewById(R.id.playlist_name3);
-        Button back = (Button) findViewById(R.id.backBtnProfile);
+        playlistName1 = findViewById(R.id.playlist_name1);
+        playlistName2 = findViewById(R.id.playlist_name2);
+        playlistName3 = findViewById(R.id.playlist_name3);
+        Button back = findViewById(R.id.backBtnProfile);
 
+        /**
+         * Parsing the data we received from the API call
+         * In a try/catch block to ensure call is properly checked and user receives data
+         * Changing JSON Strings we passed into this activity back to JSONObjects for parsing
+         */
         try {
             JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("data"));
             JSONObject jsonObj2 = new JSONObject(getIntent().getStringExtra("playlistsData"));
 
+            //
             String displayNameE = jsonObj.getString("display_name");
             displayName.setText(displayNameE);
 
@@ -60,7 +67,10 @@ public class SpotifyProfile extends AppCompatActivity {
             }
 
             JSONArray itemsArray = jsonObj2.getJSONArray("items");
-            // Display top 3 playlists
+
+            /** Display top 3 playlists
+             *
+             */
             for (int i = 0; i < Math.min(3, itemsArray.length()); i++) {
                 JSONObject playlistObject = itemsArray.getJSONObject(i);
                 String playlistName = playlistObject.getString("name");
@@ -89,6 +99,7 @@ public class SpotifyProfile extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+        // Back button
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +109,8 @@ public class SpotifyProfile extends AppCompatActivity {
         });
 
     }
+
+    // Uses Picasso Library to load the image url from API JSON String into the ImageView
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
     }
