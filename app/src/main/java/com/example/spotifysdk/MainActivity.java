@@ -217,4 +217,36 @@ public class MainActivity extends AppCompatActivity {
         }
         return topArtists;
     }
+    public List<String> fetchTopSongsImages() {
+        List<String> topSongsImagesUrls = new ArrayList<>();
+        try {
+            // Extracting the JSON string from Intent extra
+            String jsonData = getIntent().getStringExtra("topTracks");
+            if (jsonData == null) {
+                Log.e("fetchTopSongsImages", "No JSON data found in Intent extra 'topSongs'");
+                return topSongsImagesUrls; // Early return to avoid NullPointerException
+            }
+
+            JSONObject jsonObj = new JSONObject(jsonData);
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+
+            // Loop through the items array, stopping at 5 or the array's length, whichever is smaller
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject songObject = itemsArray.getJSONObject(i);
+                JSONObject albumObject = songObject.getJSONObject("album");
+                JSONArray imagesArray = albumObject.getJSONArray("images");
+
+                // If there are images, add the URL of the first image to the list
+                if (imagesArray.length() > 0) {
+                    JSONObject imageObject = imagesArray.getJSONObject(0); // Getting the first image
+                    String imageUrl = imageObject.getString("url");
+                    topSongsImagesUrls.add(imageUrl);
+                    Log.d("JSON", "Song Image: " + imageUrl);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("fetchTopSongsImages", "Error parsing JSON data", e);
+        }
+        return topSongsImagesUrls;
+    }
 }
