@@ -29,6 +29,16 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
+    private TextView topSongTextView1;
+    private TextView topSongTextView2;
+    private TextView topSongTextView3;
+    private TextView topSongTextView4;
+    private TextView topSongTextView5;
+    private ImageView topSongImage1;
+    private ImageView topSongImage2;
+    private ImageView topSongImage3;
+    private ImageView topSongImage4;
+    private ImageView topSongImage5;
     private ImageView topArtistImage, profilePic;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
 
@@ -198,12 +208,43 @@ public class HomeFragment extends Fragment {
         //TOP SONGS TAB
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topSongsArray = mainActivity.parseTop5Songs();
-        if (topSongsArray != null) {
-            for (String song : topSongsArray) {
-                Log.d("JSON", "Top Songs " + song);
+        List<String> topImagesArray = mainActivity.fetchTopSongsImages();
+        // Text Views
+        TextView[] topSongTextViews = new TextView[] {
+                root.findViewById(R.id.TopSongName1),
+                root.findViewById(R.id.TopSongName2),
+                root.findViewById(R.id.TopSongName3),
+                root.findViewById(R.id.TopSongName4),
+                root.findViewById(R.id.TopSongName5)
+        };
+        ImageView[] topSongImages = new ImageView[] {
+                root.findViewById(R.id.TopSongImage1),
+                root.findViewById(R.id.TopSongImage2),
+                root.findViewById(R.id.TopSongImage3),
+                root.findViewById(R.id.TopSongImage4),
+                root.findViewById(R.id.TopSongImage5)
+        };
+        // Setting Text
+        if (topSongsArray != null && topSongsArray.size() >= 5) {
+            try {
+
+            } catch (Exception e) {
+                Log.d("JSON", "Error " + e);
+            }
+            for (int i = 0; i < topSongTextViews.length; i++) {
+                topSongTextViews[i].setText(topSongsArray.get(i));
+            }
+        }
+
+        // Setting Images
+        if (topImagesArray != null && topImagesArray.size() >= 5) {
+            for (int i = 0; i < topSongImages.length; i++) {
+                loadImageFromUrl(topImagesArray.get(i), topSongImages[i]);
             }
         } else {
             Log.d("JSON", "Null Songs");
+            Log.d("JSON", "Null Images or insufficient images");
         }
+
     }
 }
