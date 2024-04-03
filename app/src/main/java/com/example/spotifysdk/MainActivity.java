@@ -212,6 +212,12 @@ public class MainActivity extends AppCompatActivity {
                 String artistName = artistObject.getString("name");
                 topArtists.add(artistName);
             }
+            JSONObject genres = itemsArray.getJSONObject(0);
+            String genre = genres.getString("genres");
+            genre = genre.substring(2, genre.length() - 2);
+            genre = genre.replaceAll("\"", "");
+            String[] genreArray = genre.split(",");
+            topArtists.add(genreArray[0]);
         } catch (Exception e) {
             e.printStackTrace();
         }

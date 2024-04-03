@@ -23,22 +23,15 @@ import com.example.spotifysdk.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
-    private TextView topSongTextView1;
-    private TextView topSongTextView2;
-    private TextView topSongTextView3;
-    private TextView topSongTextView4;
-    private TextView topSongTextView5;
-    private ImageView topSongImage1;
-    private ImageView topSongImage2;
-    private ImageView topSongImage3;
-    private ImageView topSongImage4;
-    private ImageView topSongImage5;
+    private TextView ov_song1, ov_song2, ov_song3, ov_song4, ov_song5, ov_genre;
     private ImageView topArtistImage, profilePic;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
 
@@ -69,6 +62,10 @@ public class HomeFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Top Artist"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Songs"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Genres"));
+        tabLayout.addTab(tabLayout.newTab().setText("Top Genre"));
+        tabLayout.addTab(tabLayout.newTab().setText("Top Song"));
+        tabLayout.addTab(tabLayout.newTab().setText("Top Album"));
+        tabLayout.addTab(tabLayout.newTab().setText("Recommendations"));
 
 
 
@@ -179,23 +176,42 @@ public class HomeFragment extends Fragment {
         ov_artist3 = root.findViewById(R.id.artist3);
         ov_artist4 = root.findViewById(R.id.artist4);
         ov_artist5 = root.findViewById(R.id.artist5);
+        ov_genre = root.findViewById(R.id.ov_genre);
         profilePic = root.findViewById(R.id.ov_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topArtistsArray = mainActivity.fetchTop5Artists();
         if (topArtistsArray != null && !topArtistsArray.isEmpty()) {
-            Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             ov_artist1.setText(topArtistsArray.get(0));
             ov_artist2.setText(topArtistsArray.get(1));
             ov_artist3.setText(topArtistsArray.get(2));
             ov_artist4.setText(topArtistsArray.get(3));
             ov_artist5.setText(topArtistsArray.get(4));
+            ov_genre.setText(topArtistsArray.get(5));
+            Log.d("JSON", "Genres: " + topArtistsArray.get(5));
         }
+
+
         String profile = mainActivity.getProfile();
-        Log.d("JSON", "Profile: " + profile);
+
         if (profile != null) {
             loadImageFromUrl(profile, profilePic);
         } else {
             Log.d("JSON", "Null Profile");
+        }
+
+        ov_song1 = root.findViewById(R.id.song1);
+        ov_song2 = root.findViewById(R.id.song2);
+        ov_song3 = root.findViewById(R.id.song3);
+        ov_song4 = root.findViewById(R.id.song4);
+        ov_song5 = root.findViewById(R.id.song5);
+        List<String> topSongsArray = mainActivity.parseTop5Songs();
+        if (topSongsArray != null && !topSongsArray.isEmpty()) {
+            //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            ov_song1.setText(topSongsArray.get(0));
+            ov_song2.setText(topSongsArray.get(1));
+            ov_song3.setText(topSongsArray.get(2));
+            ov_song4.setText(topSongsArray.get(3));
+            ov_song5.setText(topSongsArray.get(4));
         }
 
 

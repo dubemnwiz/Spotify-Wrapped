@@ -13,6 +13,7 @@
         android:background="?attr/colorPrimary"
         app:tabTextColor="@color/white"
         app:tabIndicatorHeight="4dp"
+        app:tabMode="scrollable"
         app:tabIndicatorColor="#AAFF00"/> <!-- Set the color of the tab indicator -->
 
     <!-- ViewPager to display content corresponding to tabs -->
