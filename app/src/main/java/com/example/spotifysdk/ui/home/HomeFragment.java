@@ -27,7 +27,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-    private TextView topArtistTextView;
+    private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
     private ImageView topArtistImage;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
 
@@ -82,31 +82,18 @@ public class HomeFragment extends Fragment {
                     contentContainer.removeAllViews();
                     contentContainer.addView(tabContentView);
 
-                    //TOP ARTIST TAB
-                    topArtistTextView = root.findViewById(R.id.textView2);
-                    topArtistImage = root.findViewById(R.id.topartist_image);
-                    MainActivity mainActivity = (MainActivity) requireActivity();
-                    String topArtistName = mainActivity.fetchTopArtist();
-                    if (topArtistName != null) {
-                        // Replace R.id.textView2 with the ID of your TextView
-                        topArtistTextView.setText(topArtistName);
-                    }
-                    String topArtistImageURL = mainActivity.fetchTopArtistImage();
-                    if (topArtistImage != null) {
-                        loadImageFromUrl(topArtistImageURL, topArtistImage);
-                    } else {
-                        Log.d("JSON", "Null");
+                    switch (selectedPosition) {
+                        case 0: // Top Artist tab
+                            updateOverviewUI(root);
+                            break;
+                        case 1: // Overview tab
+                            updateTopArtistUI(root);
+                            break;
+                        case 2: // Top Songs tab
+                            updateTopSongsUI(root);
+                            break;
                     }
 
-                    //TOP SONGS TAB
-                    List<String> topSongsArray = mainActivity.parseTop5Songs();
-                    if (topSongsArray != null) {
-                        for (String song : topSongsArray) {
-                            Log.d("JSON", "Top Songs " + song);
-                        }
-                    } else {
-                        Log.d("JSON", "Null Songs");
-                    }
 
                 } catch (Exception e){
                     // Handle tab selection
@@ -146,5 +133,74 @@ public class HomeFragment extends Fragment {
     }
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
+    }
+
+
+
+    private void updateTopArtistUI(View root) {
+        // Handle UI updates for the Top Artist tab
+        // Code to set text and load image for top artist
+
+        //TOP ARTIST TAB
+        topArtistTextView = root.findViewById(R.id.textView2);
+        topArtistImage = root.findViewById(R.id.topartist_image);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String topArtistName = mainActivity.fetchTopArtist();
+        if (topArtistName != null) {
+            // Replace R.id.textView2 with the ID of your TextView
+            topArtistTextView.setText(topArtistName);
+        }
+        String topArtistImageURL = mainActivity.fetchTopArtistImage();
+        if (topArtistImage != null) {
+            loadImageFromUrl(topArtistImageURL, topArtistImage);
+        } else {
+            Log.d("JSON", "Null");
+        }
+
+    }
+
+    private void updateOverviewUI(View root) {
+        // Handle UI updates for the Overview tab
+        // Code to set text for top 5 artists
+        //OVERVIEW TAB
+        ov_artist1 = root.findViewById(R.id.artist1);
+        ov_artist2 = root.findViewById(R.id.artist2);
+        ov_artist3 = root.findViewById(R.id.artist3);
+        ov_artist4 = root.findViewById(R.id.artist4);
+        ov_artist5 = root.findViewById(R.id.artist5);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topArtistsArray = mainActivity.fetchTop5Artists();
+        if (topArtistsArray != null && !topArtistsArray.isEmpty()) {
+            Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            try {
+
+            } catch (Exception e) {
+                Log.d("JSON", "Error " + e);
+            }
+            ov_artist1.setText(topArtistsArray.get(0));
+            ov_artist2.setText(topArtistsArray.get(1));
+            ov_artist3.setText(topArtistsArray.get(2));
+            ov_artist4.setText(topArtistsArray.get(3));
+            ov_artist5.setText(topArtistsArray.get(4));
+
+
+
+        }
+
+    }
+
+    private void updateTopSongsUI(View root) {
+        // Handle UI updates for the Top Songs tab
+        // Code to display top song
+        //TOP SONGS TAB
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topSongsArray = mainActivity.parseTop5Songs();
+        if (topSongsArray != null) {
+            for (String song : topSongsArray) {
+                Log.d("JSON", "Top Songs " + song);
+            }
+        } else {
+            Log.d("JSON", "Null Songs");
+        }
     }
 }

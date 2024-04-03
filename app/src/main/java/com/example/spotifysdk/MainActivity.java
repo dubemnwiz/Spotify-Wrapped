@@ -202,4 +202,19 @@ public class MainActivity extends AppCompatActivity {
         }
         return topSongs;
     }
+    public List<String> fetchTop5Artists() {
+        List<String> topArtists = new ArrayList<>();
+        try {
+            JSONObject artistsData = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONArray itemsArray = artistsData.getJSONArray("items");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject artistObject = itemsArray.getJSONObject(i);
+                String artistName = artistObject.getString("name");
+                topArtists.add(artistName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topArtists;
+    }
 }
