@@ -21,6 +21,7 @@ public class SpotifyProfile extends AppCompatActivity {
 
     //Declaring the TextViews and ImageViews
     private TextView displayName, followerCount, playlistName1, playlistName2, playlistName3, testname;
+    public static String overview;
     private ImageView profilePic, playlistPic1, playlistPic2, playlistPic3;
 
     @Override
@@ -63,7 +64,9 @@ public class SpotifyProfile extends AppCompatActivity {
             if (imagesArray.length() > 0) {
                 JSONObject imageObject = imagesArray.getJSONObject(0);
                 String profilePictureUrl = imageObject.getString("url");
+                overview = profilePictureUrl;
                 loadImageFromUrl(profilePictureUrl,profilePic);
+
             }
 
             JSONArray itemsArray = jsonObj2.getJSONArray("items");

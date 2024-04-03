@@ -217,4 +217,32 @@ public class MainActivity extends AppCompatActivity {
         }
         return topArtists;
     }
+    public String getProfile() {
+        String profilePic = null;
+        try {
+            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("data"));
+            JSONArray imagesArray = jsonObj.getJSONArray("images");
+            Log.d("JSON", "IMAGE URL " + jsonObj);
+            if (imagesArray.length() > 0) {
+                JSONObject imageObject = imagesArray.getJSONObject(0);
+                profilePic = imageObject.getString("url");
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return profilePic;
+    }
+    public String getProfileName() {
+        String profileName = null;
+        try {
+            JSONObject jsonObj = new JSONObject(getIntent().getStringExtra("data"));
+            profileName = jsonObj.getString("display_name");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return profileName;
+    }
+
 }

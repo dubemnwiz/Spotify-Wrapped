@@ -26,10 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="104dp"
-        android:layout_marginEnd="308dp"
         android:text="Artist 1"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ov_image" />
 
     <TextView
@@ -37,44 +38,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="8dp"
         android:text="Artist 2"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artist1" />
 
     <TextView
-        android:id="@+id/artist3"
+        android:id="@+id/artist4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="8dp"
-        android:text="Artist 3"
-        android:textColor="#FFFDFD"
+        android:layout_marginTop="4dp"
+        android:text="Artist 4"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/artist2" />
+        app:layout_constraintTop_toBottomOf="@+id/artist3" />
 
     <TextView
         android:id="@+id/artist5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="Artist 5"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artist4" />
 
     <TextView
-        android:id="@+id/artist4"
+        android:id="@+id/artist3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="8dp"
-        android:text="Artist 4"
-        android:textColor="#FFFFFF"
+        android:layout_marginTop="4dp"
+        android:text="Artist 3"
+        android:textColor="#FFFDFD"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/artist3" />
+        app:layout_constraintTop_toBottomOf="@+id/artist2" />
 
     <TextView
         android:id="@+id/ov_minutes"

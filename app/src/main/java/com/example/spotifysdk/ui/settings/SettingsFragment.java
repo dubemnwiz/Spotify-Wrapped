@@ -3,11 +3,13 @@ package com.example.spotifysdk.ui.settings;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,14 +21,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spotifysdk.Editaccount;
 import com.example.spotifysdk.LoginActivity;
+import com.example.spotifysdk.MainActivity;
 import com.example.spotifysdk.MainActivity2;
 import com.example.spotifysdk.R;
 import com.example.spotifysdk.databinding.FragmentSettingsBinding;
+import com.squareup.picasso.Picasso;
 
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding binding;
     private TextView profile_name;
+    private ImageView profile_image;
     private String username;
     private static final String IS_DARK = "isDark";
 
@@ -87,6 +92,17 @@ public class SettingsFragment extends Fragment {
         });
 
         profile_name = (TextView) root.findViewById(R.id.settings_name);
+        profile_image = (ImageView) root.findViewById(R.id.settings_image);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String profile = mainActivity.getProfile();
+        String profileName = mainActivity.getProfileName();
+        Log.d("JSON", "Profile: " + profile);
+        if (profile != null && profileName != null) {
+            loadImageFromUrl(profile, profile_image);
+            profile_name.setText(profileName);
+        } else {
+            Log.d("JSON", "Null Profile");
+        }
         //username = getIntent().getStringExtra("key_user");
         return root;
     }
@@ -102,13 +118,8 @@ public class SettingsFragment extends Fragment {
         startActivity(intent);
     }
 
-    /*
-    public void getUserDetails() {
-        DBHelper dbHelper = new DBHelper(getActivity());
-        ArrayList<User> list = dbHelper.getUserData(username);
-        User usermodel = list.get(0);
+    private void loadImageFromUrl(String imageUrl, ImageView view) {
+        Picasso.get().load(imageUrl).into(view);
     }
-
-     */
 
 }

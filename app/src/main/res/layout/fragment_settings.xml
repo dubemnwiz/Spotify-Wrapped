@@ -25,6 +25,7 @@
             android:orientation="vertical"
             >
             <ImageView
+                android:id="@+id/settings_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -50,14 +51,14 @@
             </TextView>
 
             <TextView
+                style="@style/TEXT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="androidstudio@android.com"
                 android:textColor="#CCFFFFFF"
                 android:textSize="12sp"
-                android:layout_gravity="center"
-                style="@style/TEXT"
-                >
+                android:visibility="invisible">
 
             </TextView>
 

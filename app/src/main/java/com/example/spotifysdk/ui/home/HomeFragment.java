@@ -18,6 +18,7 @@ import com.example.spotifysdk.Editaccount;
 import com.example.spotifysdk.HomePagerAdapter;
 import com.example.spotifysdk.MainActivity;
 import com.example.spotifysdk.R;
+import com.example.spotifysdk.SpotifyProfile;
 import com.example.spotifysdk.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
@@ -28,7 +29,7 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
-    private ImageView topArtistImage;
+    private ImageView topArtistImage, profilePic;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
 
 
@@ -168,24 +169,26 @@ public class HomeFragment extends Fragment {
         ov_artist3 = root.findViewById(R.id.artist3);
         ov_artist4 = root.findViewById(R.id.artist4);
         ov_artist5 = root.findViewById(R.id.artist5);
+        profilePic = root.findViewById(R.id.ov_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topArtistsArray = mainActivity.fetchTop5Artists();
         if (topArtistsArray != null && !topArtistsArray.isEmpty()) {
             Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-            try {
-
-            } catch (Exception e) {
-                Log.d("JSON", "Error " + e);
-            }
             ov_artist1.setText(topArtistsArray.get(0));
             ov_artist2.setText(topArtistsArray.get(1));
             ov_artist3.setText(topArtistsArray.get(2));
             ov_artist4.setText(topArtistsArray.get(3));
             ov_artist5.setText(topArtistsArray.get(4));
-
-
-
         }
+        String profile = mainActivity.getProfile();
+        Log.d("JSON", "Profile: " + profile);
+        if (profile != null) {
+            loadImageFromUrl(profile, profilePic);
+        } else {
+            Log.d("JSON", "Null Profile");
+        }
+
+
 
     }
 
