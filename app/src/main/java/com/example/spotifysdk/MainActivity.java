@@ -70,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         //Top Artist Page
-
-
         String topArtistsData = getIntent().getStringExtra("topArtists");
 
         try {
