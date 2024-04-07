@@ -32,8 +32,10 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
     private TextView ov_song1, ov_song2, ov_song3, ov_song4, ov_song5, ov_genre;
+    private TextView tv_genre, tv_song, tv_album;
     private ImageView topArtistImage, profilePic;
-    private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
+    private ImageView topsong_image, topgenre_image, topalbum_image;
+    private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres, R.layout.top_genre, R.layout.top_song, R.layout.top_album, R.layout.layout_recom};
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,6 +60,12 @@ public class HomeFragment extends Fragment {
         View tabContentView = inflater.inflate(tabLayouts[0], container, false);
         ViewGroup contentContainer = root.findViewById(R.id.content_container);
         contentContainer.addView(tabContentView);
+        try {
+            updateOverviewUI(root);
+        } catch (Exception e) {
+
+        }
+
         //tabLayout.addTab(tabLayout.newTab().setText("Overview"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Artist"));
         tabLayout.addTab(tabLayout.newTab().setText("Top Songs"));
@@ -99,6 +107,15 @@ public class HomeFragment extends Fragment {
                             break;
                         case 2: // Top Songs tab
                             updateTopSongsUI(root);
+                            break;
+                        case 4: // Top Genre tab
+                            updateTopGenre(root);
+                            break;
+                        case 5: // Top Song tab
+                            updateTopSong(root);
+                            break;
+                        case 6: // Top Song tab
+                            updateTopAlbum(root);
                             break;
                     }
 
@@ -263,4 +280,57 @@ public class HomeFragment extends Fragment {
         }
 
     }
+    private void updateTopSong(View root) {
+        //TOP SONG TAB
+        tv_song = root.findViewById(R.id.tv_song);
+        topsong_image = root.findViewById(R.id.topsong_image);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topSongsArray = mainActivity.parseTop5Songs();
+        if (topSongsArray != null && !topSongsArray.isEmpty()) {
+            //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            tv_song.setText(topSongsArray.get(0));
+        }
+        List<String> topImagesArray = mainActivity.fetchTopSongsImages();
+        if (topImagesArray != null && !topImagesArray.isEmpty()) {
+            //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            loadImageFromUrl(topImagesArray.get(0), topsong_image);
+        }
+
+
+
+    }
+    private void updateTopGenre(View root) {
+        //TOP SONG TAB
+
+        tv_genre = root.findViewById(R.id.tv_genre);
+        topgenre_image = root.findViewById(R.id.topgenre_image);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topSongsArray = mainActivity.fetchTop5Artists();
+        if (topSongsArray != null && !topSongsArray.isEmpty()) {
+            //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            tv_genre.setText(topSongsArray.get(5));
+        }
+        String topArtistImageURL = mainActivity.fetchTopArtistImage();
+        if (topArtistImageURL != null) {
+            loadImageFromUrl(topArtistImageURL, topgenre_image);
+        } else {
+            Log.d("JSON", "Null");
+        }
+
+    }
+    private void updateTopAlbum(View root) {
+        //TOP SONG TAB
+        tv_album = root.findViewById(R.id.tv_album);
+        topalbum_image = root.findViewById(R.id.topalbum_image);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topAlbumArray = mainActivity.fetchTopAlbum();
+        if (topAlbumArray != null && !topAlbumArray.isEmpty()) {
+            //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
+            tv_album.setText(topAlbumArray.get(0));
+            loadImageFromUrl(topAlbumArray.get(1), topalbum_image);
+        }
+
+    }
+
+
 }

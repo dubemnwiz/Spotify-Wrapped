@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
             genre = genre.replaceAll("\"", "");
             String[] genreArray = genre.split(",");
             topArtists.add(genreArray[0]);
+            Log.d("Test", "Here: " + itemsArray);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -279,6 +280,28 @@ public class MainActivity extends AppCompatActivity {
             Log.e("fetchTopSongsImages", "Error parsing JSON data", e);
         }
         return topSongsImagesUrls;
+    }
+
+    public List<String> fetchTopAlbum() {
+        List<String> topSongs = new ArrayList<>();
+        try {
+            JSONObject tracksData = new JSONObject(getIntent().getStringExtra("topTracks"));
+            JSONArray itemsArray = tracksData.getJSONArray("items");
+            JSONObject trackObject = itemsArray.getJSONObject(1);
+            JSONObject album = trackObject.getJSONObject("album");
+            String trackName = album.getString("name");
+            topSongs.add(trackName);
+            Log.d("Album", "name: " + trackName);
+            JSONArray albumArray = album.getJSONArray("images");
+            JSONObject albumCover = albumArray.getJSONObject(1);
+            String albumURL = albumCover.getString("url");
+            topSongs.add(albumURL);
+            Log.d("Album", "cover: " + albumURL);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topSongs;
     }
 
 
