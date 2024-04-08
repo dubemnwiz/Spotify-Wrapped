@@ -1,15 +1,24 @@
 package com.example.spotifysdk.ui.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
@@ -25,6 +34,10 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -148,6 +161,15 @@ public class HomeFragment extends Fragment {
                 //
             }
         });
+
+        Button shareButton = root.findViewById(R.id.btn_share); // Replace with your share button ID
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateAndSharePDF(root);
+            }
+        });
+
         return root;
     }
 
@@ -363,6 +385,95 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
+    private void generateAndSharePDF(View rootView) {
+        // Create a bitmap from the view
+        Bitmap bitmap = createBitmapFromView(rootView);
+
+        // Create a PDF document
+        PdfDocument pdfDocument = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+
+        // Draw the bitmap on the PDF page
+        Canvas canvas = page.getCanvas();
+        Paint paint = new Paint();
+        paint.setColor(android.graphics.Color.WHITE);
+        canvas.drawPaint(paint);
+        canvas.drawBitmap(bitmap, 0, 0, null);
+
+        // Finish the page
+        pdfDocument.finishPage(page);
+
+        // Save the PDF file
+        File pdfFile = savePDF(pdfDocument);
+
+        // Share the PDF file
+        if (pdfFile != null) {
+            sharePDF(pdfFile);
+        } else {
+            Toast.makeText(requireContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
+        }
+
+        // Close the PDF document
+        pdfDocument.close();
+    }
+
+    // Method to create a bitmap from a view
+    private Bitmap createBitmapFromView(View view) {
+        // Get the width and height of the view
+        int width = view.getWidth();
+        int height = view.getHeight();
+
+        // Create a bitmap with the same width and height as the view
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Create a canvas with the bitmap
+        Canvas canvas = new Canvas(bitmap);
+
+        // Draw the view onto the canvas
+        view.draw(canvas);
+
+        return bitmap;
+    }
+
+    // Method to save the PDF file
+    private File savePDF(PdfDocument pdfDocument) {
+        // Create a file to save the PDF
+        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "overview.pdf");
+
+        try {
+            // Create a file output stream
+            FileOutputStream outputStream = new FileOutputStream(pdfFile);
+
+            // Write the PDF document to the output stream
+            pdfDocument.writeTo(outputStream);
+
+            // Close the output stream
+            outputStream.close();
+
+            return pdfFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void sharePDF(File file) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("application/pdf");
+        Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", file);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share PDF"));
+    }
+
+    private Bitmap getBitmapFromView(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
 
 
 }
