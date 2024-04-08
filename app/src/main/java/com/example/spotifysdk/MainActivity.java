@@ -30,7 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -164,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return topArtistName;
     }
+
     public String fetchTopArtistImage() {
         String topArtistImageUrl = null;
         try {
@@ -200,6 +203,66 @@ public class MainActivity extends AppCompatActivity {
         }
         return topSongs;
     }
+    public List<String> fetchTop5Genres() {
+        List<String> topGenres = new ArrayList<>();
+        try {
+            JSONObject artistsData = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONArray itemsArray = artistsData.getJSONArray("items");
+
+            // Map to store genre occurrences
+            Map<String, Integer> genreMap = new HashMap<>();
+
+            // Iterate through each artist
+            for (int i = 0; i < itemsArray.length(); i++) {
+                JSONObject artist = itemsArray.getJSONObject(i);
+                JSONArray genresArray = artist.getJSONArray("genres");
+
+                // Iterate through genres of each artist
+                for (int j = 0; j < genresArray.length(); j++) {
+                    String genre = genresArray.getString(j);
+                    // Update genre occurrences
+                    genreMap.put(genre, genreMap.getOrDefault(genre, 0) + 1);
+                }
+            }
+
+            // Sort the genreMap by occurrences
+            List<Map.Entry<String, Integer>> genreList = new ArrayList<>(genreMap.entrySet());
+            genreList.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+            // Extract top 5 genres
+            for (int i = 0; i < Math.min(5, genreList.size()); i++) {
+                topGenres.add(genreList.get(i).getKey());
+            }
+
+            for (int i = 0; i < topGenres.size(); i++) {
+                String genre = topGenres.get(i);
+                topGenres.set(i, formatGenreString(genre));
+            }
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return topGenres;
+    }
+
+    // Helper method to format the genre strings
+    private String formatGenreString(String input) {
+        StringBuilder result = new StringBuilder(input.length());
+        boolean capitalizeNext = true;
+        for (char c : input.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+                result.append(c);
+            } else if (capitalizeNext) {
+                result.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+            } else {
+                result.append(Character.toLowerCase(c));
+            }
+        }
+        return result.toString();
+    }
+
     public List<String> fetchTop5Artists() {
         List<String> topArtists = new ArrayList<>();
         try {
@@ -280,6 +343,38 @@ public class MainActivity extends AppCompatActivity {
             Log.e("fetchTopSongsImages", "Error parsing JSON data", e);
         }
         return topSongsImagesUrls;
+    }
+
+    public List<String> fetchTopGenresImages() {
+        List<String> topGenresImagesUrls = new ArrayList<>();
+        try {
+            // Extracting the JSON string from Intent extra
+            String jsonData = getIntent().getStringExtra("topArtists");
+            if (jsonData == null) {
+                Log.e("fetchTopGenresImages", "No JSON data found in Intent extra 'topArtists'");
+                return topGenresImagesUrls; // Early return to avoid NullPointerException
+            }
+
+            JSONObject jsonObj = new JSONObject(jsonData);
+            JSONArray itemsArray = jsonObj.getJSONArray("items");
+
+            // Loop through the items array, stopping at 5 or the array's length, whichever is smaller
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject artistObject = itemsArray.getJSONObject(i);
+                JSONArray imagesArray = artistObject.getJSONArray("images");
+
+                // If there are images, add the URL of the first image to the list
+                if (imagesArray.length() > 0) {
+                    JSONObject imageObject = imagesArray.getJSONObject(0); // Getting the first image
+                    String imageUrl = imageObject.getString("url");
+                    topGenresImagesUrls.add(imageUrl);
+                    Log.d("JSON", "Genre Image: " + imageUrl);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e("fetchTopGenresImages", "Error parsing JSON data", e);
+        }
+        return topGenresImagesUrls;
     }
 
     public List<String> fetchTopAlbum() {

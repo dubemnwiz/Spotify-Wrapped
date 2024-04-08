@@ -108,6 +108,9 @@ public class HomeFragment extends Fragment {
                         case 2: // Top Songs tab
                             updateTopSongsUI(root);
                             break;
+                        case 3: // Top Genres tab
+                            updateTopGenres(root);
+                            break;
                         case 4: // Top Genre tab
                             updateTopGenre(root);
                             break;
@@ -280,6 +283,36 @@ public class HomeFragment extends Fragment {
         }
 
     }
+
+    private void updateTopGenres(View root) {
+        // Handle UI updates for the Top Genres tab
+        // Code to display top genres
+        //TOP GENRES TAB
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topGenresArray = mainActivity.fetchTop5Genres();
+        // Text Views
+        TextView[] topGenreTextViews = new TextView[] {
+                root.findViewById(R.id.genre1),
+                root.findViewById(R.id.genre2),
+                root.findViewById(R.id.genre3),
+                root.findViewById(R.id.genre4),
+                root.findViewById(R.id.genre5)
+        };
+        // Setting Text
+        if (topGenresArray != null && topGenresArray.size() >= 5) {
+            try {
+
+            } catch (Exception e) {
+                Log.d("JSON", "Error " + e);
+            }
+            for (int i = 0; i < topGenreTextViews.length; i++) {
+                topGenreTextViews[i].setText(topGenresArray.get(i));
+            }
+        }
+
+
+    }
+
     private void updateTopSong(View root) {
         //TOP SONG TAB
         tv_song = root.findViewById(R.id.tv_song);
@@ -305,19 +338,18 @@ public class HomeFragment extends Fragment {
         tv_genre = root.findViewById(R.id.tv_genre);
         topgenre_image = root.findViewById(R.id.topgenre_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
-        List<String> topSongsArray = mainActivity.fetchTop5Artists();
+        List<String> topSongsArray = mainActivity.fetchTop5Genres();
         if (topSongsArray != null && !topSongsArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-            tv_genre.setText(topSongsArray.get(5));
+            tv_genre.setText(topSongsArray.get(0));
         }
-        String topArtistImageURL = mainActivity.fetchTopArtistImage();
-        if (topArtistImageURL != null) {
-            loadImageFromUrl(topArtistImageURL, topgenre_image);
-        } else {
-            Log.d("JSON", "Null");
+        List<String> topGenreImageURL = mainActivity.fetchTopGenresImages();
+        if (topGenreImageURL != null) {
+            loadImageFromUrl(topGenreImageURL.get(0), topgenre_image);
         }
 
     }
+
     private void updateTopAlbum(View root) {
         //TOP SONG TAB
         tv_album = root.findViewById(R.id.tv_album);
