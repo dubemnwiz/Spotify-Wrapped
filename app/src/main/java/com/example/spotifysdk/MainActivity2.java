@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Hashtable;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -48,6 +51,10 @@ public class MainActivity2 extends AppCompatActivity {
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
+    private Hashtable<String, String> range_table = new Hashtable<>();
+
+    private Spinner range_spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +64,8 @@ public class MainActivity2 extends AppCompatActivity {
         tokenTextView = (TextView) findViewById(R.id.token_text_view);
         codeTextView = (TextView) findViewById(R.id.code_text_view);
         profileTextView = (TextView) findViewById(R.id.response_text_view);
+
+        range_spinner = findViewById(R.id.range_spinner);
 
         // Initialize the buttons
         Button tokenBtn = (Button) findViewById(R.id.token_btn);
@@ -78,6 +87,11 @@ public class MainActivity2 extends AppCompatActivity {
         profileBtn.setOnClickListener((v) -> {
             onGetUserProfileClicked();
         });
+
+        //Add values to HashTable
+        range_table.put("1 Year", "long_term");
+        range_table.put("6 Months", "medium_term");
+        range_table.put("1 Month", "short_term");
 
         loadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +151,6 @@ public class MainActivity2 extends AppCompatActivity {
 
         } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
             mAccessCode = response.getCode();
-            setTextAsync(mAccessCode, codeTextView);
         }
     }
 
@@ -150,15 +163,20 @@ public class MainActivity2 extends AppCompatActivity {
             Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        String temp = range_spinner.getSelectedItem().toString();
+        temp = range_table.get(temp);
+
+        setTextAsync(mAccessCode, codeTextView);
         // Create a request to get the user's top artists
         final Request topArtists = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
+                .url("https://api.spotify.com/v1/me/top/artists?time_range="+temp)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
         // Create a request to get the user's top tracks
         final Request topTracks = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks")
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range="+temp)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
