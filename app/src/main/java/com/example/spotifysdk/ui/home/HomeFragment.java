@@ -19,6 +19,7 @@ import com.example.spotifysdk.HomePagerAdapter;
 import com.example.spotifysdk.MainActivity;
 import com.example.spotifysdk.R;
 import com.example.spotifysdk.SpotifyProfile;
+import com.example.spotifysdk.SpotifyWrappedDbHelper;
 import com.example.spotifysdk.databinding.FragmentHomeBinding;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
@@ -35,6 +36,7 @@ public class HomeFragment extends Fragment {
     private TextView tv_genre, tv_song, tv_album;
     private ImageView topArtistImage, profilePic;
     private ImageView topsong_image, topgenre_image, topalbum_image;
+    private SpotifyWrappedDbHelper dbHelper;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres, R.layout.top_genre, R.layout.top_song, R.layout.top_album, R.layout.layout_recom};
 
 
@@ -50,7 +52,8 @@ public class HomeFragment extends Fragment {
 
         ViewPager viewPager = root.findViewById(R.id.view_pager);
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
-
+        // Initialize the dbHelper
+        dbHelper = new SpotifyWrappedDbHelper(getContext());
 
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         TabLayout.Tab tab = tabLayout.newTab();
@@ -364,5 +367,24 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private void insertDataIntoDatabase(String artistName, String songName, String imageUrl) {
+        if (dbHelper != null) {
+            boolean isInserted = dbHelper.insertSpotifyWrappedEntry(artistName, songName, imageUrl);
+            if (isInserted) {
+                Log.d("HomeFragment", "Data inserted successfully.");
+            } else {
+                Log.d("HomeFragment", "Failed to insert data.");
+            }
+        }
+    }
+    private void updateDatabase() {
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> topArtistsArray = mainActivity.fetchTop5Artists();
+        List<String> topSongsArray = mainActivity.parseTop5Songs();
+        List<String> topImagesArray = mainActivity.fetchTopSongsImages();
+        for (int i = 0; i < topSongsArray.size(); i++) {
+            insertDataIntoDatabase(topArtistsArray.get(i), topSongsArray.get(i), topImagesArray.get(i));
+        }
+    }
 
 }
