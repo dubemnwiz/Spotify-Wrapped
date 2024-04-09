@@ -7,6 +7,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,6 +25,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.spotifysdk.databinding.ActivityMainBinding;
 import com.example.spotifysdk.ui.home.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.spotify.sdk.android.auth.AuthorizationClient;
+import com.spotify.sdk.android.auth.AuthorizationRequest;
+import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -32,10 +37,25 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    public static final String CLIENT_ID = "98ff8d5e27094c31928d530b9e9704f0";
+    public static final String REDIRECT_URI = "spotifysdk://auth";
+
+    public static final int AUTH_TOKEN_REQUEST_CODE = 0;
+    public static final int AUTH_CODE_REQUEST_CODE = 1;
+
+    private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private String mAccessToken;
+
+    private Call mCall;
 
     SwitchCompat switcher;
     boolean nightMode;
@@ -101,10 +121,14 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
+        // Find buttons by their IDs
+        ImageButton playbackButton1 = findViewById(R.id.imageButton);
+        ImageButton playbackButton2 = findViewById(R.id.imageButton2);
+        ImageButton playbackButton3 = findViewById(R.id.imageButton3);
+        ImageButton playbackButton4 = findViewById(R.id.imageButton4);
+        ImageButton playbackButton5 = findViewById(R.id.imageButton5);
+        // Add more buttons if needed
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
