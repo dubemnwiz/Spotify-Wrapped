@@ -25,9 +25,12 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -52,6 +55,7 @@ public class MainActivity2 extends AppCompatActivity {
     private String successfulLogin = "Successfully connected to Spotify!";
 
     private TextView tokenTextView, codeTextView, profileTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,6 +323,7 @@ public class MainActivity2 extends AppCompatActivity {
      * Get user top tracks
      * This method will get the user's top tracks using the token
      */
+    List<String> topTrackURIs;
     private void fetchTracks(Request request, final String artistsData, String profileData, String uriData) {
         mCall = mOkHttpClient.newCall(request);
 
@@ -334,6 +339,7 @@ public class MainActivity2 extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject tracksJsonObject = new JSONObject(response.body().string());
+                    topTrackURIs = parseTopTrackURIs(tracksJsonObject); // Parse the top track URIs
                     tracksData = tracksJsonObject.toString();
                     startMainActivity(artistsData, tracksData, profileData);
                 } catch (JSONException e) {
@@ -345,20 +351,20 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    public List<String> parseTopTrackURI() {
-        List<String> topTrackURI = new ArrayList<>();
-        try {
-            JSONObject tracksData = new JSONObject(getIntent().getStringExtra("topTrackURI"));
-            JSONArray itemsArray = tracksData.getJSONArray("items");
-            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
-                JSONObject trackObject = itemsArray.getJSONObject(i);
-                String trackURI = trackObject.getString("uri");
-                topTrackURI.add(trackURI);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    // Method to parse the top track URI from the JSON response
+    private List<String> parseTopTrackURIs(JSONObject tracksJsonObject) throws JSONException {
+        List<String> topTrackURIs = new ArrayList<>();
+        JSONArray itemsArray = tracksJsonObject.getJSONArray("items");
+        for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+            JSONObject trackObject = itemsArray.getJSONObject(i);
+            String trackURI = trackObject.getString("uri");
+            topTrackURIs.add(trackURI);
         }
-        return topTrackURI;
+        return topTrackURIs;
+    }
+
+    public List<String> getTrackURI() {
+        return topTrackURIs;
     }
 
     //Create a request to add songs to queue

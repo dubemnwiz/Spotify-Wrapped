@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView topartist_name, playlistName1, playlistName2, playlistName3;
     private ImageView topartist_image, playlistPic1, playlistPic2, playlistPic3;
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -171,9 +171,11 @@ public class MainActivity extends AppCompatActivity {
         // Recreate the activity to apply the theme changes
         recreate();
     }
+
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
     }
+
     public String fetchTopArtist() {
         String topArtistName = null;
         try {
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return topArtistName;
     }
+
     public String fetchTopArtistImage() {
         String topArtistImageUrl = null;
         try {
@@ -226,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return topSongs;
     }
+
     public List<String> fetchTop5Artists() {
         List<String> topArtists = new ArrayList<>();
         try {
@@ -247,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return topArtists;
     }
+
     public String getProfile() {
         String profilePic = null;
         try {
@@ -263,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return profilePic;
     }
+
     public String getProfileName() {
         String profileName = null;
         try {
@@ -274,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return profileName;
     }
+
     public List<String> fetchTopSongsImages() {
         List<String> topSongsImagesUrls = new ArrayList<>();
         try {
@@ -307,5 +314,19 @@ public class MainActivity extends AppCompatActivity {
         return topSongsImagesUrls;
     }
 
-
+    public List<String> top5SongLinks() {
+        List<String> songLinks = new ArrayList<>();
+        try {
+            JSONObject tracksData = new JSONObject(getIntent().getStringExtra("topTracks"));
+            JSONArray itemsArray = tracksData.getJSONArray("items");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject trackObject = itemsArray.getJSONObject(i);
+                String link = trackObject.getString("preview_url");
+                songLinks.add(link);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return songLinks;
+    }
 }

@@ -1,13 +1,19 @@
 package com.example.spotifysdk.ui.home;
 
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -34,6 +41,9 @@ public class HomeFragment extends Fragment {
     private TextView ov_song1, ov_song2, ov_song3, ov_song4, ov_song5, ov_genre;
     private ImageView topArtistImage, profilePic;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres};
+
+    private Button playButton;
+    private MediaPlayer mediaPlayer;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -217,13 +227,14 @@ public class HomeFragment extends Fragment {
 
 
     }
-
+    List<String> songLinks;
     private void updateTopSongsUI(View root) {
         // Handle UI updates for the Top Songs tab
         // Code to display top song
         //TOP SONGS TAB
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topSongsArray = mainActivity.parseTop5Songs();
+
         List<String> topImagesArray = mainActivity.fetchTopSongsImages();
         // Text Views
         TextView[] topSongTextViews = new TextView[] {
@@ -262,5 +273,107 @@ public class HomeFragment extends Fragment {
             Log.d("JSON", "Null Images or insufficient images");
         }
 
+        songLinks = mainActivity.top5SongLinks();
+        if (songLinks != null) {
+            Log.d("Testing", "Array: " + songLinks);
+        }
+
+        ImageButton track1 = root.findViewById(R.id.imageButton);
+        track1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (songLinks != null && songLinks.get(0) != null) {
+                    playAudio(songLinks.get(0));
+                } else {
+                    Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ImageButton track2 = root.findViewById(R.id.imageButton2);
+        track2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (songLinks != null && songLinks.get(4) != null) {
+                    playAudio(songLinks.get(4));
+                } else {
+                    Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ImageButton track3 = root.findViewById(R.id.imageButton3);
+        track3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (songLinks != null && songLinks.get(3) != null) {
+                    playAudio(songLinks.get(3));
+                } else {
+                    Toast.makeText(requireContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ImageButton track4 = root.findViewById(R.id.imageButton4);
+        track4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (songLinks != null && songLinks.get(2) != null) {
+                    playAudio(songLinks.get(2));
+                } else {
+                    Toast.makeText(getContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ImageButton track5 = root.findViewById(R.id.imageButton5);
+        track5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (songLinks != null && songLinks.get(1) != null) {
+                    playAudio(songLinks.get(1));
+                } else {
+                    Toast.makeText(getContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+    }
+
+    private void playAudio(String audioUrl) {
+        if (audioUrl == null || audioUrl.isEmpty()) {
+            Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build());
+        try {
+            mediaPlayer.setDataSource(audioUrl);
+            mediaPlayer.prepareAsync(); // prepare async to not block main thread
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer.start();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 }
