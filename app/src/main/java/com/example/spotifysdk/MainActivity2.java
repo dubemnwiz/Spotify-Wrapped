@@ -15,16 +15,22 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -44,9 +50,12 @@ public class MainActivity2 extends AppCompatActivity {
 
     private String artistsData;
     private String tracksData;
+
+    private String URIData;
     private String successfulLogin = "Successfully connected to Spotify!";
 
     private TextView tokenTextView, codeTextView, profileTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +171,7 @@ public class MainActivity2 extends AppCompatActivity {
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
+        //Create a request to get the user's profile
         final Request profileRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
@@ -186,7 +196,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
-                    fetchTracks(topTracks, artistsData, profileData);
+                    fetchTracks(topTracks, artistsData, profileData, URIData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -312,7 +322,8 @@ public class MainActivity2 extends AppCompatActivity {
      * Get user top tracks
      * This method will get the user's top tracks using the token
      */
-    private void fetchTracks(Request request, final String artistsData, String profileData) {
+    List<String> topTrackURIs;
+    private void fetchTracks(Request request, final String artistsData, String profileData, String uriData) {
         mCall = mOkHttpClient.newCall(request);
 
         mCall.enqueue(new Callback() {
@@ -327,6 +338,7 @@ public class MainActivity2 extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject tracksJsonObject = new JSONObject(response.body().string());
+                    topTrackURIs = parseTopTrackURIs(tracksJsonObject); // Parse the top track URIs
                     tracksData = tracksJsonObject.toString();
                     startMainActivity(artistsData, tracksData, profileData);
                 } catch (JSONException e) {
@@ -337,6 +349,28 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
+
+    // Method to parse the top track URI from the JSON response
+    private List<String> parseTopTrackURIs(JSONObject tracksJsonObject) throws JSONException {
+        List<String> topTrackURIs = new ArrayList<>();
+        JSONArray itemsArray = tracksJsonObject.getJSONArray("items");
+        for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+            JSONObject trackObject = itemsArray.getJSONObject(i);
+            String trackURI = trackObject.getString("uri");
+            topTrackURIs.add(trackURI);
+        }
+        return topTrackURIs;
+    }
+
+    public List<String> getTrackURI() {
+        return topTrackURIs;
+    }
+
+    //Create a request to add songs to queue
+    final Request queue = new Request.Builder()
+            .url("https://api.spotify.com/v1/me/player/queue")
+            .addHeader("Authorization", "Bearer " + mAccessToken)
+            .build();
 
     /**
      * Starts the profile view activity
@@ -361,6 +395,7 @@ public class MainActivity2 extends AppCompatActivity {
         intent.putExtra("data", data);
         intent.putExtra("topArtists", artistsData);
         intent.putExtra("topTracks", tracksData);
+        intent.putExtra("topTrackURI", URIData);
         startActivity(intent);
     }
 
