@@ -32,6 +32,16 @@ android {
         viewBinding = true
     }
 }
+apply plugin: 'checkstyle'
+
+checkstyle {
+    configFile = file("${rootDir}/checkstyle.xml")
+    // Other configurations if needed
+}
+
+tasks.withType(Checkstyle) {
+    // Configurations if needed
+}
 
 dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'

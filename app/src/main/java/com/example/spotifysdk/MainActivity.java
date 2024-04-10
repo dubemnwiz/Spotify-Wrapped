@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return topSongs;
     }
+
     public List<String> fetchTop5Genres() {
         List<String> topGenres = new ArrayList<>();
         try {

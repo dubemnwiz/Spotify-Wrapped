@@ -1,0 +1,14 @@
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <module name="TreeWalker">
+        <module name="WhitespaceAround">
+            <property name="allowEmptyMethods" value="true"/>
+        </module>
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <!-- Add more indentation properties as needed -->
+        </module>
+    </module>
+</module>
