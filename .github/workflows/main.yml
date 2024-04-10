@@ -26,4 +26,15 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-    
+
+      - name: Run Checkstyle
+        run: ./gradlew checkstyleMain --no-daemon
+        continue-on-error: true
+      
+      - name: Upload Checkstyle Report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: checkstyle-report
+          path: build/reports/checkstyle/main.xml
+      
