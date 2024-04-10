@@ -23,18 +23,4 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
-
-      - name: Checkstyle
-        run: ./gradlew checkstyleMain
-
-      - name: Commit formatted files
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git commit -m "Format code"
-          
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    
