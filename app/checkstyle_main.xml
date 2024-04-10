@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <!-- Checking Java source files -->
+    <module name="TreeWalker">
+        <!-- Ensure files end with a newline -->
+        <module name="NewlineAtEndOfFile"/>
+
+        <!-- Ensure curly braces are used for all control structures -->
+        <module name="NeedBraces"/>
+
+        <!-- Ensure switch statements have a default case -->
+        <module name="EmptySwitchStatement"/>
+
+        <!-- Require spaces before and after binary operators -->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+        </module>
+
+        <!-- Require a space after the cast operator -->
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="CAST"/>
+        </module>
+
+        <!-- Ensure package names are in lowercase -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+
+        <!-- Ensure class names start with an uppercase letter -->
+        <module name="TypeName">
+            <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Ensure method names start with a lowercase letter -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+
+        <!-- Ensure field names start with a lowercase letter -->
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
+        </module>
+    </module>
+</module>

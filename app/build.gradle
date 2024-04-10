@@ -1,5 +1,10 @@
 plugins {
     id 'com.android.application'
+    id 'checkstyle'
+}
+
+checkstyle {
+    configFile = file("$rootDir/app/checkstyle_main.xml")
 }
 
 android {
