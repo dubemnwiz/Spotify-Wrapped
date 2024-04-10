@@ -366,6 +366,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     /**
+     * Test
      * Creates a UI thread to update a TextView in the background
      * Reduces UI latency and makes the system perform more consistently
      *

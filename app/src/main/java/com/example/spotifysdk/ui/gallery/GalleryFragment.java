@@ -83,7 +83,7 @@ public class GalleryFragment extends Fragment {
                     if (mainActivity2 != null) {
                         mainActivity2.onGetUserProfileClicked();
                         mainActivity2.onLoadDataClicked();
-                        homeFragment.
+
                     }
                 });
                 galleryLayout.addView(imageView);
