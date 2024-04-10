@@ -400,5 +400,21 @@ public class MainActivity extends AppCompatActivity {
         return topSongs;
     }
 
+    public List<String> top5SongLinks() {
+        List<String> songLinks = new ArrayList<>();
+        try {
+            JSONObject tracksData = new JSONObject(getIntent().getStringExtra("topTracks"));
+            JSONArray itemsArray = tracksData.getJSONArray("items");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject trackObject = itemsArray.getJSONObject(i);
+                String link = trackObject.getString("preview_url");
+                songLinks.add(link);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return songLinks;
+    }
+
 
 }
