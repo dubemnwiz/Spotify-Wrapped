@@ -173,7 +173,7 @@ public class MainActivity2 extends AppCompatActivity {
                 .build();
 
         seeds = fetchArtistsSeeds();
-        String s = String.join(",", seeds);
+        String s = String.join("%2", seeds);
         // Create a request to get the user's top tracks
         final Request topRecs = new Request.Builder()
                 .url("https://api.spotify.com/v1/recommendations?seed_artists=" + s)
