@@ -15,10 +15,13 @@ import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -41,9 +44,10 @@ public class MainActivity2 extends AppCompatActivity {
     private String profileData;
 
     public static String Profile;
-
+    private String recData;
     private String artistsData;
     private String tracksData;
+    private List<String> artistSeeds;
     private String successfulLogin = "Successfully connected to Spotify!";
 
     private TextView tokenTextView, codeTextView, profileTextView;
@@ -162,6 +166,14 @@ public class MainActivity2 extends AppCompatActivity {
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
+        artistSeeds = fetchTop5ArtistSeed();
+        String s = String.join(",", artistSeeds);
+        // Create a request to get the user's top tracks
+        final Request topRecs = new Request.Builder()
+                .url("https://api.spotify.com/v1/recommendations?seed_artists=" + s)
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
         final Request profileRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
@@ -186,7 +198,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
-                    fetchTracks(topTracks, artistsData, profileData);
+                    fetchTracks(topTracks, artistsData, profileData, recData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -197,7 +209,7 @@ public class MainActivity2 extends AppCompatActivity {
         mCall = mOkHttpClient.newCall(profileRequest);
 
         /**
-         * Making API call for top artists
+         * Making API call for profile data
          */
         mCall.enqueue(new Callback() {
             @Override
@@ -212,6 +224,32 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     profileData = jsonObject.toString();
+                } catch (JSONException e) {
+                    Log.d("JSON", "Failed to parse data: " + e);
+                    Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mCall = mOkHttpClient.newCall(topRecs);
+
+        /**
+         * Making API call for profile data
+         */
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("HTTP", "Failed to fetch data: " + e);
+                Toast.makeText(MainActivity2.this, "Failed to fetch data, watch Logcat for more details",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    recData = jsonObject.toString();
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -312,7 +350,7 @@ public class MainActivity2 extends AppCompatActivity {
      * Get user top tracks
      * This method will get the user's top tracks using the token
      */
-    private void fetchTracks(Request request, final String artistsData, String profileData) {
+    private void fetchTracks(Request request, final String artistsData, String profileData, String recsData) {
         mCall = mOkHttpClient.newCall(request);
 
         mCall.enqueue(new Callback() {
@@ -328,7 +366,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject tracksJsonObject = new JSONObject(response.body().string());
                     tracksData = tracksJsonObject.toString();
-                    startMainActivity(artistsData, tracksData, profileData);
+                    startMainActivity(artistsData, tracksData, profileData, recsData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -336,6 +374,22 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public List<String> fetchTop5ArtistSeed() {
+        List<String> seeds = new ArrayList<>();
+        try {
+            JSONObject artistsData = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONArray itemsArray = artistsData.getJSONArray("items");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject artistObject = itemsArray.getJSONObject(i);
+                String artistID = artistObject.getString("id");
+                seeds.add(artistID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return seeds;
     }
 
     /**
@@ -355,10 +409,11 @@ public class MainActivity2 extends AppCompatActivity {
      * Puts the data from the API calls into the profile activity for parsing
      * The JSON is currently in the form of a String (Not JSONObject)
      */
-    private void startMainActivity(String artistsData, String tracksData, String data) {
+    private void startMainActivity(String artistsData, String tracksData, String data, String recommendations) {
         Log.d("JSON", "Failed: " + data);
         Intent intent = new Intent(MainActivity2.this, MainActivity.class);
         intent.putExtra("data", data);
+        intent.putExtra("recommendations", recommendations);
         intent.putExtra("topArtists", artistsData);
         intent.putExtra("topTracks", tracksData);
         startActivity(intent);
