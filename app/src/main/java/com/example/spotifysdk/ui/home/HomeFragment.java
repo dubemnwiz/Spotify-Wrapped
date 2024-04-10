@@ -20,16 +20,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.spotifysdk.Editaccount;
 import com.example.spotifysdk.HomePagerAdapter;
 import com.example.spotifysdk.MainActivity;
+import com.example.spotifysdk.MainActivity2;
 import com.example.spotifysdk.R;
 import com.example.spotifysdk.SpotifyProfile;
 import com.example.spotifysdk.SpotifyWrappedDbHelper;
 import com.example.spotifysdk.databinding.FragmentHomeBinding;
+import com.example.spotifysdk.ui.gallery.GalleryFragment;
+import com.example.spotifysdk.ui.gallery.GalleryItem;
+import com.example.spotifysdk.ui.gallery.IconDateItem;
+import com.example.spotifysdk.ui.gallery.SharedViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +44,10 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
@@ -49,6 +58,7 @@ public class HomeFragment extends Fragment {
     private ImageView topArtistImage, profilePic;
     private ImageView topsong_image, topgenre_image, topalbum_image;
     private SpotifyWrappedDbHelper dbHelper;
+    private SharedViewModel viewModel;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres, R.layout.top_genre, R.layout.top_song, R.layout.top_album, R.layout.layout_recom};
 
 
@@ -170,6 +180,19 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 generateAndSharePDF(root);
             }
+        });
+
+        Button saveButton = root.findViewById(R.id.save);
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        saveButton.setOnClickListener(v -> {
+            // Get current date in desired format
+            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+            // Create new IconDateItem
+            IconDateItem newItem = new IconDateItem(R.drawable.spotify_icon, currentDate);
+            updateDatabase();
+            // Add to ViewModel
+            viewModel.addIconItem(newItem);
         });
 
         return root;
@@ -494,7 +517,6 @@ public class HomeFragment extends Fragment {
         view.draw(canvas);
         return bitmap;
     }
-
 
 
 }

@@ -141,34 +141,34 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    /**
-     * Get user top data
-     * This method will get the user top data using the token
-     */
-    public void onLoadDataClicked() {
-        if (mAccessToken == null) {
-            Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        // Create a request to get the user's top artists
-        final Request topArtists = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
+           /**
+         * Get user top data
+         * This method will get the user top data using the token
+         */
+        public void onLoadDataClicked() {
+            if (mAccessToken == null) {
+                Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Create a request to get the user's top artists
+            final Request topArtists = new Request.Builder()
+                    .url("https://api.spotify.com/v1/me/top/artists")
+                    .addHeader("Authorization", "Bearer " + mAccessToken)
+                    .build();
 
-        // Create a request to get the user's top tracks
-        final Request topTracks = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks")
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
+            // Create a request to get the user's top tracks
+            final Request topTracks = new Request.Builder()
+                    .url("https://api.spotify.com/v1/me/top/tracks")
+                    .addHeader("Authorization", "Bearer " + mAccessToken)
+                    .build();
 
-        final Request profileRequest = new Request.Builder()
-                .url("https://api.spotify.com/v1/me")
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
+            final Request profileRequest = new Request.Builder()
+                    .url("https://api.spotify.com/v1/me")
+                    .addHeader("Authorization", "Bearer " + mAccessToken)
+                    .build();
 
-        cancelCall();
-        mCall = mOkHttpClient.newCall(topArtists);
+            cancelCall();
+            mCall = mOkHttpClient.newCall(topArtists);
 
         /**
          * Making API call for top artists
