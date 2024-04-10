@@ -33,9 +33,10 @@
     <View
         android:layout_width="446dp"
         android:layout_height="137dp"
-        android:layout_marginBottom="61dp"
+        android:layout_marginBottom="64dp"
         android:background="#2596be"
         app:layout_constraintBottom_toTopOf="@+id/topalbum_image"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteX="-18dp" />
 
     <TextView
