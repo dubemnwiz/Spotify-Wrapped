@@ -90,7 +90,7 @@ public class GalleryFragment extends Fragment {
                 galleryLayout.addView(dateTextView);
             }
         });
-
+//hi
         return view;
     }
 
