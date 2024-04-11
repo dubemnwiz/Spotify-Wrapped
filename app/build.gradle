@@ -3,8 +3,13 @@ plugins {
     id 'checkstyle'
 }
 
+tasks.register('checkstyleMain', Checkstyle) {
+    configFile = file("$rootDir/checkstyle.xml")
+    // Other configuration options as needed
+}
+
 checkstyle {
-    configFile = file("$rootDir/app/checkstyle_main.xml")
+    configFile = file("$rootDir/checkstyle.xml")
 }
 
 android {
@@ -49,6 +54,7 @@ android {
 }
 
 dependencies {
+    checkstyle 'com.puppycrawl.tools:checkstyle:8.44'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.spotify.android:auth:2.1.1'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'

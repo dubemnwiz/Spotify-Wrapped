@@ -416,5 +416,21 @@ public class MainActivity extends AppCompatActivity {
         return songLinks;
     }
 
+    public List<String> parseTop5RecArtists() {
+        List<String> recArtists = new ArrayList<>();
+        try {
+            JSONObject recsData = new JSONObject(getIntent().getStringExtra("recsData"));
+            JSONArray itemsArray = recsData.getJSONArray("tracks");
+            for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
+                JSONObject trackObject = itemsArray.getJSONObject(i);
+                String trackName = trackObject.getString("name");
+                recArtists.add(trackName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return recArtists;
+    }
+
 
 }
