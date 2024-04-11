@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment {
     List<String> topImagesArray;
     List<String> topGenresArray;
     List<String> topAlbumArray;
+    List<String> topGenresImagesArray;
     String artistImage;
     private TextView topArtistTextView, ov_artist1, ov_artist2, ov_artist3, ov_artist4, ov_artist5;
     private TextView ov_song1, ov_song2, ov_song3, ov_song4, ov_song5, ov_genre;
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment {
     private ImageView topsong_image, topgenre_image, topalbum_image;
     private SpotifyWrappedDbHelper dbHelper;
     private SharedViewModel viewModel;
+    private Boolean isClicked = false;
     private int[] tabLayouts = {R.layout.layout_overview, R.layout.layout_artists, R.layout.layout_tracks, R.layout.layout_genres, R.layout.top_genre, R.layout.top_song, R.layout.top_album, R.layout.layout_recom};
 
 
@@ -204,182 +206,10 @@ public class HomeFragment extends Fragment {
         });
         viewModel.imageClicked.observe(getViewLifecycleOwner(), clicked -> {
             if (clicked) {
-                // Clear existing data and load data from databases
-                topArtistsArray.clear();
-                topSongsArray.clear();
-                topGenresArray.clear();
-                topAlbumArray.clear();
-                topImagesArray.clear();
-
-// Retrieving data from Artists table
-                Cursor artistCursor = dbHelper.getAllArtists();
-                if (artistCursor.moveToFirst()) {
-                    do {
-                        @SuppressLint("Range") String artistName = artistCursor.getString(artistCursor.getColumnIndex("name"));
-                        @SuppressLint("Range") String artistImageUrl = artistCursor.getString(artistCursor.getColumnIndex("image_url"));
-                        // Add the retrieved data to artistList
-                        topArtistsArray.add(artistName);
-                        artistImage = artistImageUrl;
-                    } while (artistCursor.moveToNext());
-                }
-                artistCursor.close();
-
-// Retrieving data from Songs table
-                Cursor songCursor = dbHelper.getAllSongs();
-                if (songCursor.moveToFirst()) {
-                    do {
-                        @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
-                        @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
-                        // Add the retrieved data to songList
-                        topSongsArray.add(songName);
-                        topImagesArray.add(songImageUrl);
-                    } while (songCursor.moveToNext());
-                }
-                songCursor.close();
-
-// Retrieving data from Genres table
-                Cursor genreCursor = dbHelper.getAllGenres();
-                if (genreCursor.moveToFirst()) {
-                    do {
-                        @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
-                        @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
-                        // Add the retrieved data to genreList
-                        topGenresArray.add(genreName);
-                    } while (genreCursor.moveToNext());
-                }
-                genreCursor.close();
-
-// Retrieving data from Albums table
-                Cursor albumCursor = dbHelper.getAllAlbums();
-                if (albumCursor.moveToFirst()) {
-                    do {
-                        @SuppressLint("Range") String albumName = albumCursor.getString(albumCursor.getColumnIndex("name"));
-                        @SuppressLint("Range") String albumImageUrl = albumCursor.getString(albumCursor.getColumnIndex("image_url"));
-                        // Add the retrieved data to albumList
-                        topAlbumArray.add(albumName);
-                        topAlbumArray.add(albumImageUrl);
-                    } while (albumCursor.moveToNext());
-                }
-                albumCursor.close();
-                topArtistTextView = root.findViewById(R.id.textView2);
-                topArtistImage = root.findViewById(R.id.topartist_image);
-                if (topArtistsArray.get(0) != null) {
-                    // Replace R.id.textView2 with the ID of your TextView
-                    topArtistTextView.setText(topArtistsArray.get(0));
-                }
-                if (topArtistImage != null) {
-                    loadImageFromUrl(artistImage, topArtistImage);
-                } else {
-                    Log.d("JSON", "Null");
-                }
-                ov_artist1 = root.findViewById(R.id.artist1);
-                ov_artist2 = root.findViewById(R.id.artist2);
-                ov_artist3 = root.findViewById(R.id.artist3);
-                ov_artist4 = root.findViewById(R.id.artist4);
-                ov_artist5 = root.findViewById(R.id.artist5);
-                ov_genre = root.findViewById(R.id.ov_genre);
-                profilePic = root.findViewById(R.id.ov_image);
-                if (topArtistsArray != null && !topArtistsArray.isEmpty()) {
-                    ov_artist1.setText(topArtistsArray.get(0));
-                    ov_artist2.setText(topArtistsArray.get(1));
-                    ov_artist3.setText(topArtistsArray.get(2));
-                    ov_artist4.setText(topArtistsArray.get(3));
-                    ov_artist5.setText(topArtistsArray.get(4));
-                    ov_genre.setText(topArtistsArray.get(5));
-                    Log.d("JSON", "Genres: " + topArtistsArray.get(5));
-                }
-
-                ov_song1 = root.findViewById(R.id.song1);
-                ov_song2 = root.findViewById(R.id.song2);
-                ov_song3 = root.findViewById(R.id.song3);
-                ov_song4 = root.findViewById(R.id.song4);
-                ov_song5 = root.findViewById(R.id.song5);
-                if (topSongsArray != null && !topSongsArray.isEmpty()) {
-                    //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-                    ov_song1.setText(topSongsArray.get(0));
-                    ov_song2.setText(topSongsArray.get(1));
-                    ov_song3.setText(topSongsArray.get(2));
-                    ov_song4.setText(topSongsArray.get(3));
-                    ov_song5.setText(topSongsArray.get(4));
-                }
-                TextView[] topSongTextViews = new TextView[] {
-                        root.findViewById(R.id.TopSongName1),
-                        root.findViewById(R.id.TopSongName2),
-                        root.findViewById(R.id.TopSongName3),
-                        root.findViewById(R.id.TopSongName4),
-                        root.findViewById(R.id.TopSongName5)
-                };
-                ImageView[] topSongImages = new ImageView[] {
-                        root.findViewById(R.id.TopSongImage1),
-                        root.findViewById(R.id.TopSongImage2),
-                        root.findViewById(R.id.TopSongImage3),
-                        root.findViewById(R.id.TopSongImage4),
-                        root.findViewById(R.id.TopSongImage5)
-                };
-                // Setting Text
-                if (topSongsArray != null && topSongsArray.size() >= 5) {
-                    try {
-
-                    } catch (Exception e) {
-                        Log.d("JSON", "Error " + e);
-                    }
-                    for (int i = 0; i < topSongTextViews.length; i++) {
-                        topSongTextViews[i].setText(topSongsArray.get(i));
-                    }
-                }
-
-                // Setting Images
-                if (topImagesArray != null && topImagesArray.size() >= 5) {
-                    for (int i = 0; i < topSongImages.length; i++) {
-                        loadImageFromUrl(topImagesArray.get(i), topSongImages[i]);
-                    }
-                } else {
-                    Log.d("JSON", "Null Songs");
-                    Log.d("JSON", "Null Images or insufficient images");
-                }
-                TextView[] topGenreTextViews = new TextView[] {
-                        root.findViewById(R.id.genre1),
-                        root.findViewById(R.id.genre2),
-                        root.findViewById(R.id.genre3),
-                        root.findViewById(R.id.genre4),
-                        root.findViewById(R.id.genre5)
-                };
-                // Setting Text
-                if (topGenresArray != null && topGenresArray.size() >= 5) {
-                    try {
-
-                    } catch (Exception e) {
-                        Log.d("JSON", "Error " + e);
-                    }
-                    for (int i = 0; i < topGenreTextViews.length; i++) {
-                        topGenreTextViews[i].setText(topGenresArray.get(i));
-                    }
-                }
-                tv_song = root.findViewById(R.id.tv_song);
-                topsong_image = root.findViewById(R.id.topsong_image);
-                if (topSongsArray != null && !topSongsArray.isEmpty()) {
-                    //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-                    tv_song.setText(topSongsArray.get(0));
-                }
-                if (topImagesArray != null && !topImagesArray.isEmpty()) {
-                    //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-                    loadImageFromUrl(topImagesArray.get(0), topsong_image);
-                }
-                tv_genre = root.findViewById(R.id.tv_genre);
-                topgenre_image = root.findViewById(R.id.topgenre_image);
-                if (topSongsArray != null && !topSongsArray.isEmpty()) {
-                    //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-                    tv_genre.setText(topSongsArray.get(0));
-                }
-                tv_album = root.findViewById(R.id.tv_album);
-                topalbum_image = root.findViewById(R.id.topalbum_image);
-                if (topAlbumArray != null && !topAlbumArray.isEmpty()) {
-                    //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-                    tv_album.setText(topAlbumArray.get(0));
-                    loadImageFromUrl(topAlbumArray.get(1), topalbum_image);
-                }
+                isClicked = true;
             }
         });
+        isClicked = false;
 
         return root;
     }
@@ -407,11 +237,29 @@ public class HomeFragment extends Fragment {
         topArtistImage = root.findViewById(R.id.topartist_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         String topArtistName = mainActivity.fetchTopArtist();
+        if(isClicked) {
+            // Retrieving data from Artists table
+            topArtistsArray.clear();
+            Cursor artistCursor = dbHelper.getAllArtists();
+            if (artistCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String artistName = artistCursor.getString(artistCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String artistImageUrl = artistCursor.getString(artistCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to artistList
+                    topArtistsArray.add(artistName);
+                    artistImage = artistImageUrl;
+                } while (artistCursor.moveToNext());
+            }
+            artistCursor.close();
+        }
         if (topArtistName != null) {
             // Replace R.id.textView2 with the ID of your TextView
             topArtistTextView.setText(topArtistName);
         }
         String topArtistImageURL = mainActivity.fetchTopArtistImage();
+        if (isClicked) {
+            topArtistImageURL = artistImage;
+        }
         if (topArtistImage != null) {
             loadImageFromUrl(topArtistImageURL, topArtistImage);
         } else {
@@ -433,6 +281,20 @@ public class HomeFragment extends Fragment {
         profilePic = root.findViewById(R.id.ov_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         topArtistsArray = mainActivity.fetchTop5Artists();
+        if (isClicked) {
+            topArtistsArray.clear();
+            Cursor artistCursor = dbHelper.getAllArtists();
+            if (artistCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String artistName = artistCursor.getString(artistCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String artistImageUrl = artistCursor.getString(artistCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to artistList
+                    topArtistsArray.add(artistName);
+                    artistImage = artistImageUrl;
+                } while (artistCursor.moveToNext());
+            }
+            artistCursor.close();
+        }
         if (topArtistsArray != null && !topArtistsArray.isEmpty()) {
             ov_artist1.setText(topArtistsArray.get(0));
             ov_artist2.setText(topArtistsArray.get(1));
@@ -443,13 +305,13 @@ public class HomeFragment extends Fragment {
             Log.d("JSON", "Genres: " + topArtistsArray.get(5));
         }
 
-
-        String profile = mainActivity.getProfile();
-
-        if (profile != null) {
-            loadImageFromUrl(profile, profilePic);
-        } else {
-            Log.d("JSON", "Null Profile");
+        if (!isClicked) {
+            String profile = mainActivity.getProfile();
+            if (profile != null ) {
+                loadImageFromUrl(profile, profilePic);
+            } else {
+                Log.d("JSON", "Null Profile");
+            }
         }
 
         ov_song1 = root.findViewById(R.id.song1);
@@ -458,6 +320,21 @@ public class HomeFragment extends Fragment {
         ov_song4 = root.findViewById(R.id.song4);
         ov_song5 = root.findViewById(R.id.song5);
         topSongsArray = mainActivity.parseTop5Songs();
+        if (isClicked) {
+            // Retrieving data from Songs table
+            topSongsArray.clear();
+            Cursor songCursor = dbHelper.getAllSongs();
+            if (songCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to songList
+                    topSongsArray.add(songName);
+                    topImagesArray.add(songImageUrl);
+                } while (songCursor.moveToNext());
+            }
+            songCursor.close();
+        }
         if (topSongsArray != null && !topSongsArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             ov_song1.setText(topSongsArray.get(0));
@@ -493,6 +370,22 @@ public class HomeFragment extends Fragment {
                 root.findViewById(R.id.TopSongImage4),
                 root.findViewById(R.id.TopSongImage5)
         };
+        if (isClicked) {
+            topSongsArray.clear();
+            topImagesArray.clear();
+            // Retrieving data from Songs table
+            Cursor songCursor = dbHelper.getAllSongs();
+            if (songCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to songList
+                    topSongsArray.add(songName);
+                    topImagesArray.add(songImageUrl);
+                } while (songCursor.moveToNext());
+            }
+            songCursor.close();
+        }
         // Setting Text
         if (topSongsArray != null && topSongsArray.size() >= 5) {
             try {
@@ -523,6 +416,20 @@ public class HomeFragment extends Fragment {
         //TOP GENRES TAB
         MainActivity mainActivity = (MainActivity) requireActivity();
         topGenresArray = mainActivity.fetchTop5Genres();
+        if (isClicked) {
+            topGenresArray.clear();
+            // Retrieving data from Genres table
+            Cursor genreCursor = dbHelper.getAllGenres();
+            if (genreCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to genreList
+                    topGenresArray.add(genreName);
+                } while (genreCursor.moveToNext());
+            }
+            genreCursor.close();
+        }
         // Text Views
         TextView[] topGenreTextViews = new TextView[] {
                 root.findViewById(R.id.genre1),
@@ -551,12 +458,44 @@ public class HomeFragment extends Fragment {
         tv_song = root.findViewById(R.id.tv_song);
         topsong_image = root.findViewById(R.id.topsong_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
-        List<String> topSongsArray = mainActivity.parseTop5Songs();
+        topSongsArray = mainActivity.parseTop5Songs();
+        if (isClicked) {
+            topSongsArray.clear();
+            topImagesArray.clear();
+            // Retrieving data from Songs table
+            Cursor songCursor = dbHelper.getAllSongs();
+            if (songCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to songList
+                    topSongsArray.add(songName);
+                    topImagesArray.add(songImageUrl);
+                } while (songCursor.moveToNext());
+            }
+            songCursor.close();
+        }
         if (topSongsArray != null && !topSongsArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             tv_song.setText(topSongsArray.get(0));
         }
-        List<String> topImagesArray = mainActivity.fetchTopSongsImages();
+        topImagesArray = mainActivity.fetchTopSongsImages();
+        if (isClicked) {
+            topSongsArray.clear();
+            topImagesArray.clear();
+            // Retrieving data from Songs table
+            Cursor songCursor = dbHelper.getAllSongs();
+            if (songCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to songList
+                    topSongsArray.add(songName);
+                    topImagesArray.add(songImageUrl);
+                } while (songCursor.moveToNext());
+            }
+            songCursor.close();
+        }
         if (topImagesArray != null && !topImagesArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             loadImageFromUrl(topImagesArray.get(0), topsong_image);
@@ -571,12 +510,41 @@ public class HomeFragment extends Fragment {
         tv_genre = root.findViewById(R.id.tv_genre);
         topgenre_image = root.findViewById(R.id.topgenre_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
-        List<String> topSongsArray = mainActivity.fetchTop5Genres();
+        topSongsArray = mainActivity.fetchTop5Genres();
+        if (isClicked) {
+            topSongsArray.clear();
+            // Retrieving data from Genres table
+            Cursor genreCursor = dbHelper.getAllGenres();
+            if (genreCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to genreList
+                    topGenresArray.add(genreName);
+                } while (genreCursor.moveToNext());
+            }
+            genreCursor.close();
+        }
         if (topSongsArray != null && !topSongsArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             tv_genre.setText(topSongsArray.get(0));
         }
         List<String> topGenreImageURL = mainActivity.fetchTopGenresImages();
+        if (isClicked) {
+            topGenresImagesArray.clear();
+            // Retrieving data from Genres table
+            Cursor genreCursor = dbHelper.getAllGenres();
+            if (genreCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to genreList
+                    //topGenresArray.add(genreName);
+                    topGenresImagesArray.add(genreImageUrl);
+                } while (genreCursor.moveToNext());
+            }
+            genreCursor.close();
+        }
         if (topGenreImageURL != null) {
             loadImageFromUrl(topGenreImageURL.get(0), topgenre_image);
         }
@@ -589,6 +557,21 @@ public class HomeFragment extends Fragment {
         topalbum_image = root.findViewById(R.id.topalbum_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         topAlbumArray = mainActivity.fetchTopAlbum();
+        if (isClicked) {
+            topAlbumArray.clear();
+            // Retrieving data from Albums table
+            Cursor albumCursor = dbHelper.getAllAlbums();
+            if (albumCursor.moveToFirst()) {
+                do {
+                    @SuppressLint("Range") String albumName = albumCursor.getString(albumCursor.getColumnIndex("name"));
+                    @SuppressLint("Range") String albumImageUrl = albumCursor.getString(albumCursor.getColumnIndex("image_url"));
+                    // Add the retrieved data to albumList
+                    topAlbumArray.add(albumName);
+                    topAlbumArray.add(albumImageUrl);
+                } while (albumCursor.moveToNext());
+            }
+            albumCursor.close();
+        }
         if (topAlbumArray != null && !topAlbumArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             tv_album.setText(topAlbumArray.get(0));
