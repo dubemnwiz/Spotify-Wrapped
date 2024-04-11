@@ -140,6 +140,9 @@ public class HomeFragment extends Fragment {
                         case 6: // Top Song tab
                             updateTopAlbum(root);
                             break;
+                        case 7: //Top Recommendations
+                            updateTopRecom(root);
+                            break;
                     }
 
 
@@ -154,8 +157,6 @@ public class HomeFragment extends Fragment {
                     contentContainer.removeAllViews();
                     contentContainer.addView(tabContentView);
                 }
-
-
             }
 
             @Override
@@ -496,113 +497,158 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void insertDataIntoDatabase(String artistName, String songName, String imageUrl) {
-        if (dbHelper != null) {
-            boolean isInserted = dbHelper.insertSpotifyWrappedEntry(artistName, songName, imageUrl);
-            if (isInserted) {
-                Log.d("HomeFragment", "Data inserted successfully.");
-            } else {
-                Log.d("HomeFragment", "Failed to insert data.");
+    private void updateTopRecom(View root) {
+        // Handle UI updates for the Top Songs tab
+        // Code to display top song
+        //TOP SONGS TAB
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        List<String> artistsArray = mainActivity.fetchRecom();
+
+        List<String> artistImagesArray = mainActivity.recomImages();
+        // Text Views
+        TextView[] topSongTextViews = new TextView[]{
+                root.findViewById(R.id.RecText1),
+                root.findViewById(R.id.RecText2),
+                root.findViewById(R.id.RecText3),
+                root.findViewById(R.id.RecText4),
+                root.findViewById(R.id.RecText5)
+        };
+        ImageView[] topSongImages = new ImageView[]{
+                root.findViewById(R.id.RecImage1),
+                root.findViewById(R.id.RecImage2),
+                root.findViewById(R.id.RecImage3),
+                root.findViewById(R.id.RecImage4),
+                root.findViewById(R.id.RecImage5)
+        };
+        // Setting Text
+        if (artistsArray != null && artistsArray.size() >= 5) {
+            try {
+
+            } catch (Exception e) {
+                Log.d("JSON", "Error " + e);
+            }
+            for (int i = 0; i < topSongTextViews.length; i++) {
+                topSongTextViews[i].setText(artistsArray.get(i));
             }
         }
-    }
-    private void updateDatabase() {
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        List<String> topArtistsArray = mainActivity.fetchTop5Artists();
-        List<String> topSongsArray = mainActivity.parseTop5Songs();
-        List<String> topImagesArray = mainActivity.fetchTopSongsImages();
-        for (int i = 0; i < topSongsArray.size(); i++) {
-            insertDataIntoDatabase(topArtistsArray.get(i), topSongsArray.get(i), topImagesArray.get(i));
-        }
-    }
-    private void generateAndSharePDF(View rootView) {
-        // Create a bitmap from the view
-        Bitmap bitmap = createBitmapFromView(rootView);
 
-        // Create a PDF document
-        PdfDocument pdfDocument = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-        // Draw the bitmap on the PDF page
-        Canvas canvas = page.getCanvas();
-        Paint paint = new Paint();
-        paint.setColor(android.graphics.Color.WHITE);
-        canvas.drawPaint(paint);
-        canvas.drawBitmap(bitmap, 0, 0, null);
-
-        // Finish the page
-        pdfDocument.finishPage(page);
-
-        // Save the PDF file
-        File pdfFile = savePDF(pdfDocument);
-
-        // Share the PDF file
-        if (pdfFile != null) {
-            sharePDF(pdfFile);
+        // Setting Images
+        if (artistImagesArray != null && artistImagesArray.size() >= 5) {
+            for (int i = 0; i < 5; i++) {
+                Log.d("JSON", "" + artistImagesArray.get(i));
+                loadImageFromUrl(artistImagesArray.get(i), topSongImages[i]);
+            }
         } else {
-            Toast.makeText(requireContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
-        }
-
-        // Close the PDF document
-        pdfDocument.close();
-    }
-
-    // Method to create a bitmap from a view
-    private Bitmap createBitmapFromView(View view) {
-        // Get the width and height of the view
-        int width = view.getWidth();
-        int height = view.getHeight();
-
-        // Create a bitmap with the same width and height as the view
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        // Create a canvas with the bitmap
-        Canvas canvas = new Canvas(bitmap);
-
-        // Draw the view onto the canvas
-        view.draw(canvas);
-
-        return bitmap;
-    }
-
-    // Method to save the PDF file
-    private File savePDF(PdfDocument pdfDocument) {
-        // Create a file to save the PDF
-        File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "overview.pdf");
-
-        try {
-            // Create a file output stream
-            FileOutputStream outputStream = new FileOutputStream(pdfFile);
-
-            // Write the PDF document to the output stream
-            pdfDocument.writeTo(outputStream);
-
-            // Close the output stream
-            outputStream.close();
-
-            return pdfFile;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            Log.d("JSON", "Null Songs");
+            Log.d("JSON", "Null Images or insufficient images");
         }
     }
+        private void insertDataIntoDatabase (String artistName, String songName, String imageUrl){
+            if (dbHelper != null) {
+                boolean isInserted = dbHelper.insertSpotifyWrappedEntry(artistName, songName, imageUrl);
+                if (isInserted) {
+                    Log.d("HomeFragment", "Data inserted successfully.");
+                } else {
+                    Log.d("HomeFragment", "Failed to insert data.");
+                }
+            }
+        }
+        private void updateDatabase () {
+            MainActivity mainActivity = (MainActivity) requireActivity();
+            List<String> topArtistsArray = mainActivity.fetchTop5Artists();
+            List<String> topSongsArray = mainActivity.parseTop5Songs();
+            List<String> topImagesArray = mainActivity.fetchTopSongsImages();
+            for (int i = 0; i < topSongsArray.size(); i++) {
+                insertDataIntoDatabase(topArtistsArray.get(i), topSongsArray.get(i), topImagesArray.get(i));
+            }
+        }
+        private void generateAndSharePDF (View rootView){
+            // Create a bitmap from the view
+            Bitmap bitmap = createBitmapFromView(rootView);
 
-    private void sharePDF(File file) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("application/pdf");
-        Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", file);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(intent, "Share PDF"));
-    }
+            // Create a PDF document
+            PdfDocument pdfDocument = new PdfDocument();
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
+            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
-    private Bitmap getBitmapFromView(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-        return bitmap;
-    }
+            // Draw the bitmap on the PDF page
+            Canvas canvas = page.getCanvas();
+            Paint paint = new Paint();
+            paint.setColor(android.graphics.Color.WHITE);
+            canvas.drawPaint(paint);
+            canvas.drawBitmap(bitmap, 0, 0, null);
 
+            // Finish the page
+            pdfDocument.finishPage(page);
+
+            // Save the PDF file
+            File pdfFile = savePDF(pdfDocument);
+
+            // Share the PDF file
+            if (pdfFile != null) {
+                sharePDF(pdfFile);
+            } else {
+                Toast.makeText(requireContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
+            }
+
+            // Close the PDF document
+            pdfDocument.close();
+        }
+
+        // Method to create a bitmap from a view
+        private Bitmap createBitmapFromView (View view){
+            // Get the width and height of the view
+            int width = view.getWidth();
+            int height = view.getHeight();
+
+            // Create a bitmap with the same width and height as the view
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+            // Create a canvas with the bitmap
+            Canvas canvas = new Canvas(bitmap);
+
+            // Draw the view onto the canvas
+            view.draw(canvas);
+
+            return bitmap;
+        }
+
+        // Method to save the PDF file
+        private File savePDF (PdfDocument pdfDocument){
+            // Create a file to save the PDF
+            File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "overview.pdf");
+
+            try {
+                // Create a file output stream
+                FileOutputStream outputStream = new FileOutputStream(pdfFile);
+
+                // Write the PDF document to the output stream
+                pdfDocument.writeTo(outputStream);
+
+                // Close the output stream
+                outputStream.close();
+
+                return pdfFile;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        private void sharePDF (File file){
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", file);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(intent, "Share PDF"));
+        }
+
+        private Bitmap getBitmapFromView (View view){
+            Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            view.draw(canvas);
+            return bitmap;
+        }
 
 
 }

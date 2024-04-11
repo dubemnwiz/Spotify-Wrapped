@@ -1,5 +1,6 @@
 package com.example.spotifysdk;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -19,7 +20,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +56,7 @@ public class MainActivity2 extends AppCompatActivity {
     private String artistsData;
     private String tracksData;
     private String recsData;
-    private List<String> seeds;
+    private String seeds;
     private String URIData;
     private String successfulLogin = "Successfully connected to Spotify!";
 
@@ -151,6 +156,8 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
+
+
     /**
      * Get user top data
      * This method will get the user top data using the token
@@ -172,17 +179,17 @@ public class MainActivity2 extends AppCompatActivity {
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
-        seeds = fetchArtistsSeeds();
-        String s = String.join("%2", seeds);
-        // Create a request to get the user's top tracks
-        final Request topRecs = new Request.Builder()
-                .url("https://api.spotify.com/v1/recommendations?seed_artists=" + s)
-                .addHeader("Authorization", "Bearer " + mAccessToken)
-                .build();
+
 
         //Create a request to get the user's profile
         final Request profileRequest = new Request.Builder()
                 .url("https://api.spotify.com/v1/me")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
+        //Create a request to get the user's profile
+        final Request recArtists = new Request.Builder()
+                .url("https://api.spotify.com/v1/artists?id=")
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
@@ -205,6 +212,8 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
+                    seeds = fetchArtistsSeeds(artistsData);
+                    relatedArtists(seeds);
                     fetchTracks(topTracks, artistsData, profileData, URIData, recsData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
@@ -231,6 +240,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     profileData = jsonObject.toString();
+                    Log.d("tag22", "tes2: " + profileData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -238,6 +248,21 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
+
+
+
+
+
+    }
+
+    public String relatedArtists(String seeds) {
+        Log.d("tag22", "onLoad: " + seeds);
+        // Create a request to get the user's top recommended
+        final Request topRecs = new Request.Builder()
+                .url("https://api.spotify.com/v1/artists/" + seeds + "/related-artists")
+                .addHeader("Authorization", "Bearer " + mAccessToken)
+                .build();
+
 
         mCall = mOkHttpClient.newCall(topRecs);
 
@@ -257,6 +282,7 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     recsData = jsonObject.toString();
+                    Log.d("tag22", "testing2: " + recsData);
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
                     Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
@@ -264,6 +290,7 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
+        return recsData;
     }
 
 
@@ -407,10 +434,10 @@ public class MainActivity2 extends AppCompatActivity {
             .addHeader("Authorization", "Bearer " + mAccessToken)
             .build();
 
-    public List<String> fetchArtistsSeeds() {
+    public String fetchArtistsSeeds(String artistsJSON) {
         List<String> seeds = new ArrayList<>();
         try {
-            JSONObject artistsData = new JSONObject(getIntent().getStringExtra("topArtists"));
+            JSONObject artistsData = new JSONObject(artistsJSON);
             JSONArray itemsArray = artistsData.getJSONArray("items");
             for (int i = 0; i < Math.min(5, itemsArray.length()); i++) {
                 JSONObject artistObject = itemsArray.getJSONObject(i);
@@ -420,6 +447,11 @@ public class MainActivity2 extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.d("seeds", "fetchArtistsSeeds: " + seeds.toString());
+        return seeds.get(0);
+    }
+
+    public String getSeeds() {
         return seeds;
     }
 
@@ -441,13 +473,14 @@ public class MainActivity2 extends AppCompatActivity {
      * The JSON is currently in the form of a String (Not JSONObject)
      */
     private void startMainActivity(String artistsData, String tracksData, String data, String recsData) {
-        Log.d("JSON", "Failed: " + data);
+        String test = relatedArtists(seeds);
+        Log.d("JSON", "Test: " + test);
         Intent intent = new Intent(MainActivity2.this, MainActivity.class);
         intent.putExtra("data", data);
         intent.putExtra("topArtists", artistsData);
         intent.putExtra("topTracks", tracksData);
         intent.putExtra("topTrackURI", URIData);
-        intent.putExtra("topRecs", recsData);
+        intent.putExtra("topRecs", test);
         startActivity(intent);
     }
 

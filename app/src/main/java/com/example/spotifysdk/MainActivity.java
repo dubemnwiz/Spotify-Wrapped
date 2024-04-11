@@ -416,5 +416,45 @@ public class MainActivity extends AppCompatActivity {
         return songLinks;
     }
 
+    public List<String> fetchRecom() {
+        List<String> topRecom = new ArrayList<>();
+        try {
+            JSONObject artistsData = new JSONObject(getIntent().getStringExtra("topRecs"));
+            Log.d("tag33", "fetchRecom: " + artistsData);
+            JSONArray artistsArray = artistsData.getJSONArray("artists");
+            for (int i = 0; i < artistsArray.length(); i++) {
+                JSONObject artistObject = artistsArray.getJSONObject(i);
+                String artistName = artistObject.getString("name");
+                topRecom.add(artistName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return topRecom;
+    }
+    public List<String> recomImages() {
+        List<String> artistImageUrls = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("topRecs"));
+            JSONArray artistsArray = jsonObject.getJSONArray("artists");
+            for (int i = 0; i < artistsArray.length(); i++) {
+                JSONObject artistObject = artistsArray.getJSONObject(i);
+                JSONArray imagesArray = artistObject.getJSONArray("images");
+                // Choose the first image URL if available
+                if (imagesArray.length() > 0) {
+                    JSONObject firstImage = imagesArray.getJSONObject(0);
+                    String imageUrl = firstImage.getString("url");
+                    artistImageUrls.add(imageUrl);
+                } else {
+                    // If no image available, add a placeholder or handle it as needed
+                    artistImageUrls.add("No image available");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return artistImageUrls;
+    }
+
 
 }
