@@ -16,6 +16,12 @@ public class SharedViewModel extends ViewModel {
     public LiveData<List<IconDateItem>> getIconItems() {
         return iconItems;
     }
+    private MutableLiveData<Boolean> _imageClicked = new MutableLiveData<>();
+    public LiveData<Boolean> imageClicked = _imageClicked;
+
+    public void setImageClicked(boolean clicked) {
+        _imageClicked.setValue(clicked);
+    }
 
     public void addIconItem(IconDateItem item) {
         List<IconDateItem> currentItems = iconItems.getValue();

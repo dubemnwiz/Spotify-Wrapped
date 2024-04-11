@@ -1,10 +1,10 @@
 package com.example.spotifysdk;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
     // Database Info
@@ -12,13 +12,14 @@ public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Table Names
-    private static final String TABLE_SPOTIFY_WRAPPED = "spotifyWrappedEntries";
+    private static final String TABLE_ARTISTS = "artists";
+    private static final String TABLE_SONGS = "songs";
+    private static final String TABLE_GENRES = "genres";
+    private static final String TABLE_ALBUMS = "albums";
 
-    // SpotifyWrappedEntries Table Columns
-    private static final String ID = "id";
-    private static final String ARTIST_NAME = "artistName";
-    private static final String SONG_NAME = "songName";
-    private static final String IMAGE_URL = "imageUrl";
+    // Common Columns
+    private static final String NAME = "name";
+    private static final String IMAGE_URL = "image_url";
 
     public SpotifyWrappedDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,35 +27,101 @@ public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_SPOTIFY_WRAPPED_ENTRIES_TABLE = "CREATE TABLE " + TABLE_SPOTIFY_WRAPPED +
+        // Create Artists Table
+        String CREATE_ARTISTS_TABLE = "CREATE TABLE " + TABLE_ARTISTS +
                 "(" +
-                ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ARTIST_NAME + " TEXT," +
-                SONG_NAME + " TEXT," +
+                NAME + " TEXT," +
                 IMAGE_URL + " TEXT" +
                 ")";
+        db.execSQL(CREATE_ARTISTS_TABLE);
 
-        db.execSQL(CREATE_SPOTIFY_WRAPPED_ENTRIES_TABLE);
+        // Create Songs Table
+        String CREATE_SONGS_TABLE = "CREATE TABLE " + TABLE_SONGS +
+                "(" +
+                NAME + " TEXT," +
+                IMAGE_URL + " TEXT" +
+                ")";
+        db.execSQL(CREATE_SONGS_TABLE);
+
+        // Create Genres Table
+        String CREATE_GENRES_TABLE = "CREATE TABLE " + TABLE_GENRES +
+                "(" +
+                NAME + " TEXT," +
+                IMAGE_URL + " TEXT" +
+                ")";
+        db.execSQL(CREATE_GENRES_TABLE);
+
+        // Create Albums Table
+        String CREATE_ALBUMS_TABLE = "CREATE TABLE " + TABLE_ALBUMS +
+                "(" +
+                NAME + " TEXT," +
+                IMAGE_URL + " TEXT" +
+                ")";
+        db.execSQL(CREATE_ALBUMS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SPOTIFY_WRAPPED);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ARTISTS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SONGS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GENRES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALBUMS);
         onCreate(db);
     }
 
-    public boolean insertSpotifyWrappedEntry(String artistName, String songName, String imageUrl) {
+    public boolean insertArtist(String name, String imageUrl) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ARTIST_NAME, artistName);
-        contentValues.put(SONG_NAME, songName);
+        contentValues.put(NAME, name);
         contentValues.put(IMAGE_URL, imageUrl);
-        long result = db.insert(TABLE_SPOTIFY_WRAPPED, null, contentValues);
+        long result = db.insert(TABLE_ARTISTS, null, contentValues);
         return result != -1;
     }
 
-    public Cursor getAllSpotifyWrappedEntries() {
+    public boolean insertSong(String name, String imageUrl) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_SPOTIFY_WRAPPED, null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, name);
+        contentValues.put(IMAGE_URL, imageUrl);
+        long result = db.insert(TABLE_SONGS, null, contentValues);
+        return result != -1;
+    }
+
+    public boolean insertGenre(String name, String imageUrl) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, name);
+        contentValues.put(IMAGE_URL, imageUrl);
+        long result = db.insert(TABLE_GENRES, null, contentValues);
+        return result != -1;
+    }
+
+    public boolean insertAlbum(String name, String imageUrl) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, name);
+        contentValues.put(IMAGE_URL, imageUrl);
+        long result = db.insert(TABLE_ALBUMS, null, contentValues);
+        return result != -1;
+    }
+
+    public Cursor getAllArtists() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ARTISTS, null);
+    }
+
+    public Cursor getAllSongs() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_SONGS, null);
+    }
+
+    public Cursor getAllGenres() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_GENRES, null);
+    }
+
+    public Cursor getAllAlbums() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ALBUMS, null);
     }
 }

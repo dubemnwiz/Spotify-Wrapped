@@ -43,6 +43,7 @@ public class GalleryFragment extends Fragment {
     private RecyclerView galleryRecyclerView; // For the RecyclerView
     private GalleryAdapter adapter; // For the adapter
     private List<GalleryItem> galleryItems = new ArrayList<>();
+    public static Boolean imageClicked = false;
 
    // public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
      //   super.onViewCreated(view, savedInstanceState);
@@ -77,14 +78,7 @@ public class GalleryFragment extends Fragment {
 
                 // Optionally set layout parameters, scale type, etc., for imageView
                 imageView.setOnClickListener(v -> {
-
-                    MainActivity2 mainActivity2 = (MainActivity2) requireActivity();
-                    HomeFragment homeFragment = (HomeFragment) getChildFragmentManager().findFragmentById(R.id.home_fragment);
-                    if (mainActivity2 != null) {
-                        mainActivity2.onGetUserProfileClicked();
-                        mainActivity2.onLoadDataClicked();
-
-                    }
+                    viewModel.setImageClicked(true);
                 });
                 galleryLayout.addView(imageView);
 
