@@ -1,7 +1,5 @@
 package com.example.spotifysdk.ui.gallery;
 
-import android.graphics.Bitmap;
-import android.support.annotation.DrawableRes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -16,6 +16,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.spotifysdk.LoginActivity2;
 import com.example.spotifysdk.R;
 import com.example.spotifysdk.databinding.FragmentGalleryBinding;
 import com.example.spotifysdk.MainActivity;
@@ -79,6 +81,7 @@ public class GalleryFragment extends Fragment {
                 // Optionally set layout parameters, scale type, etc., for imageView
                 imageView.setOnClickListener(v -> {
                     viewModel.setImageClicked(true);
+                    Toast.makeText(getContext(), "Image clicked!", Toast.LENGTH_SHORT).show();
                 });
                 galleryLayout.addView(imageView);
 
