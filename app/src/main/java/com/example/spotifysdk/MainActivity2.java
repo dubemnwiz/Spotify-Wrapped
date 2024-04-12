@@ -80,6 +80,10 @@ public class MainActivity2 extends AppCompatActivity {
         Button back = findViewById(R.id.backBtnSpotify);
         Button loadBtn = (Button) findViewById((R.id.load_top_data));
 
+        getToken();
+        onLoadDataClicked();
+
+
         // Set the click listeners for the buttons
 
         tokenBtn.setOnClickListener((v) -> {
@@ -147,12 +151,26 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
-            mAccessToken = response.getAccessToken();
-            setTextAsync(successfulLogin, tokenTextView);
-
-        } else if (AUTH_CODE_REQUEST_CODE == requestCode) {
-            mAccessCode = response.getCode();
-            setTextAsync(mAccessCode, codeTextView);
+            if (response != null && response.getAccessToken() != null && !response.getAccessToken().isEmpty()) {
+                mAccessToken = response.getAccessToken();
+                //setTextAsync(successfulLogin, tokenTextView);
+                onLoadDataClicked();
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                startActivity(intent);
+            }
+        } else if (AUTH_CODE_REQUEST_CODE != requestCode) {
+            if (response != null && response.getCode() != null && !response.getCode().isEmpty()) {
+                mAccessCode = response.getCode();
+                setTextAsync(mAccessCode, codeTextView);
+                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                startActivity(intent);
+            }
         }
     }
 
@@ -164,7 +182,7 @@ public class MainActivity2 extends AppCompatActivity {
      */
     public void onLoadDataClicked() {
         if (mAccessToken == null) {
-            Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
             return;
         }
         // Create a request to get the user's top artists

@@ -9,22 +9,23 @@
 
     <TextView
         android:id="@+id/ov_genre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="232dp"
+        android:layout_width="178dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="207dp"
         android:layout_marginBottom="140dp"
         android:text="Genre"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artist5"
-        app:layout_constraintVertical_bias="0.844" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/song1"
         android:layout_width="145dp"
         android:layout_height="20dp"
         android:layout_marginStart="232dp"
+        android:layout_marginTop="3dp"
         android:text="Song 1"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,10 +33,10 @@
 
     <TextView
         android:id="@+id/song4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="145dp"
+        android:layout_height="20dp"
         android:layout_marginStart="232dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:text="Song 4"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +44,8 @@
 
     <TextView
         android:id="@+id/song5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="145dp"
+        android:layout_height="19dp"
         android:layout_marginStart="232dp"
         android:layout_marginTop="8dp"
         android:text="Song 5"
@@ -54,10 +55,10 @@
 
     <TextView
         android:id="@+id/song3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="147dp"
+        android:layout_height="20dp"
         android:layout_marginStart="232dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:text="Song 3"
         android:textColor="#FFFDFD"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +66,8 @@
 
     <TextView
         android:id="@+id/song2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="145dp"
+        android:layout_height="19dp"
         android:layout_marginStart="232dp"
         android:layout_marginTop="8dp"
         android:text="Song 2"
@@ -93,7 +94,8 @@
         android:id="@+id/artist1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="4dp"
         android:text="Artist 1"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:text="Artist 2"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -117,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:text="Artist 4"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="7dp"
         android:text="Artist 5"
         android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,7 +141,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:text="Artist 3"
         android:textColor="#FFFDFD"
         app:layout_constraintStart_toStartOf="parent"

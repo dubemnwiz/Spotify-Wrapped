@@ -423,6 +423,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 if (songLinks != null && songLinks.get(0) != null) {
                     playAudio(songLinks.get(0));
+                    Log.d("tag22", "onClick: Nothing");
                 } else {
                     Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
                 }
@@ -477,6 +478,7 @@ public class HomeFragment extends Fragment {
 
     private void playAudio(String audioUrl) {
         if (audioUrl == null || audioUrl.isEmpty()) {
+            Log.d("tag22", "Audio is null");
             Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -493,6 +495,7 @@ public class HomeFragment extends Fragment {
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build());
         try {
+            Log.d("tag22", "Attemptiing to play");
             mediaPlayer.setDataSource(audioUrl);
             mediaPlayer.prepareAsync(); // prepare async to not block main thread
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
