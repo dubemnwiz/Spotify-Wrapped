@@ -78,55 +78,50 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="40dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
-                android:padding="15dp"
                 android:background="@drawable/round_back_white10_20"
-                >
+                android:orientation="vertical"
+                android:padding="15dp"
+                android:visibility="gone">
 
                 <!-- Connect Spotify -->
                 <RelativeLayout
+                    android:id="@+id/spotifyConnectLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:id="@+id/spotifyConnectLayout"
-                    >
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
                         android:id="@+id/spotifyConnect"
+                        android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/spotify_icon"
                         android:background="@drawable/round_back_spotify"
                         android:padding="12dp"
-                        >
+                        android:src="@drawable/spotify_icon">
 
                     </ImageView>
 
 
-
                     <TextView
-                        android:layout_marginStart="20dp"
+                        style="@style/TEXT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/spotifyConnect"
                         android:text="Connect to Spotify"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:layout_toEndOf="@+id/spotifyConnect"
-                        style="@style/TEXT"
-                        >
-                    </TextView>
+                        android:textStyle="bold"></TextView>
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/arrow_forward"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        >
+                        android:src="@drawable/arrow_forward">
 
                     </ImageView>
 
@@ -136,44 +131,41 @@
                 <!-- Dark Mode -->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="10dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
                         android:id="@+id/nightModeIcon"
+                        android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/night_mode_icon"
                         android:background="@drawable/round_back_night_mode"
                         android:padding="12dp"
-                        >
+                        android:src="@drawable/night_mode_icon">
 
                     </ImageView>
+
                     <TextView
-                        android:layout_marginStart="20dp"
+                        style="@style/TEXT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/nightModeIcon"
                         android:text="Night Mode"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:layout_toEndOf="@+id/nightModeIcon"
-                        style="@style/TEXT"
-                        >
-                    </TextView>
+                        android:textStyle="bold"></TextView>
+
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/switchDarkMode"
-                        android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
-                        app:switchMinWidth="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
                         android:theme="@style/nightMode"
-                        >
+                        app:switchMinWidth="50dp">
 
                     </androidx.appcompat.widget.SwitchCompat>
 
@@ -184,189 +176,177 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="40dp"
                         android:id="@+id/notificationsIcon"
+                        android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/notifications_icon"
                         android:background="@drawable/round_back_notifications"
                         android:padding="12dp"
-                        >
+                        android:src="@drawable/notifications_icon">
 
                     </ImageView>
+
                     <TextView
-                        android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/notificationsIcon"
                         android:text="Notifications"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:layout_toEndOf="@+id/notificationsIcon"
-                        >
-                    </TextView>
+                        android:textStyle="bold"></TextView>
+
                     <androidx.appcompat.widget.SwitchCompat
-                        android:layout_marginStart="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
-                        app:switchMinWidth="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
                         android:theme="@style/notifications"
-                        >
+                        app:switchMinWidth="50dp">
 
                     </androidx.appcompat.widget.SwitchCompat>
 
                 </RelativeLayout>
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:padding="15dp"
-            android:background="@drawable/round_back_white10_20"
-            >
-
-            <!-- Contact Us Section-->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/round_back_white10_20"
                 android:orientation="vertical"
-                >
+                android:padding="15dp"
+                android:visibility="gone">
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:id="@+id/sendMessage"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu_gallery"
-                    android:background="@drawable/round_back_notifications"
-                    android:padding="12dp"
-                    >
-
-                </ImageView>
-                <TextView
-                    android:layout_marginStart="20dp"
-                    android:layout_width="wrap_content"
+                <!-- Contact Us Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Send us a message"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@+id/sendMessage"
-                    style="@style/TEXT"
-                    >
-                </TextView>
-                <ImageView
-                    android:layout_width="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/sendMessage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_notifications"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_menu_gallery">
+
+                    </ImageView>
+
+                    <TextView
+                        style="@style/TEXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/sendMessage"
+                        android:text="Send us a message"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arrow_forward">
+
+                    </ImageView>
+
+                </RelativeLayout>
+
+                <!-- Contact Us Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_forward"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    >
 
-                </ImageView>
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/aboutUs"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_notifications"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_menu_gallery">
 
-            <!-- Contact Us Section-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
+                    </ImageView>
 
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                    <TextView
+                        style="@style/TEXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/aboutUs"
+                        android:text="About Us"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:id="@+id/aboutUs"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu_gallery"
-                    android:background="@drawable/round_back_notifications"
-                    android:padding="12dp"
-                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arrow_forward">
 
-                </ImageView>
-                <TextView
-                    android:layout_marginStart="20dp"
-                    android:layout_width="wrap_content"
+                    </ImageView>
+
+                </RelativeLayout>
+
+                <!-- Contact Us Section-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="About Us"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@+id/aboutUs"
-                    style="@style/TEXT"
-                    >
-                </TextView>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_forward"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    >
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
-                </ImageView>
+                    <ImageView
+                        android:id="@+id/FAQs"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/round_back_notifications"
+                        android:padding="12dp"
+                        android:src="@drawable/ic_menu_gallery">
 
-            </RelativeLayout>
+                    </ImageView>
 
-            <!-- Contact Us Section-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical"
-                >
+                    <TextView
+                        style="@style/TEXT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/FAQs"
+                        android:text="FAQs"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:id="@+id/FAQs"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_menu_gallery"
-                    android:background="@drawable/round_back_notifications"
-                    android:padding="12dp"
-                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/arrow_forward">
 
-                </ImageView>
-                <TextView
-                    android:layout_marginStart="20dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="FAQs"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    android:layout_toEndOf="@+id/FAQs"
-                    style="@style/TEXT"
-                    >
-                </TextView>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/arrow_forward"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    >
+                    </ImageView>
 
-                </ImageView>
-
-            </RelativeLayout>
+                </RelativeLayout>
 
 
-        <!-- Logout -->
-        </LinearLayout>
+                <!-- Logout -->
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -434,6 +414,7 @@
 
     <TextView
         android:id="@+id/text_settings"
+        style="@style/TEXT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -441,11 +422,11 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/TEXT"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <Button
@@ -454,6 +435,7 @@
         android:layout_height="54dp"
         android:layout_marginBottom="576dp"
         android:text="Connect To Spotify"
+        android:visibility="gone"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="1dp" />
 </LinearLayout>

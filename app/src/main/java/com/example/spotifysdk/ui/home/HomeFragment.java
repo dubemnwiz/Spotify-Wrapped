@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment {
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateAndSharePDF(root);
+                generateAndShareImage(root);
             }
         });
         Button saveButton = root.findViewById(R.id.save);
@@ -746,86 +746,69 @@ public class HomeFragment extends Fragment {
         }
         dbHelper.insertAlbum(topAlbumsArray.get(0), topAlbumsArray.get(1));
     }
-        private void generateAndSharePDF (View rootView){
-            // Create a bitmap from the view
-            Bitmap bitmap = createBitmapFromView(rootView);
+    private void generateAndShareImage(View rootView) {
+        // Create a bitmap from the view of the overview tab
+        Bitmap bitmap = createBitmapFromView(rootView.findViewById(R.id.overview_layout)); // Replace R.id.overview_tab_layout with the ID of your overview tab layout
 
-            // Create a PDF document
-            PdfDocument pdfDocument = new PdfDocument();
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
-            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+        // Save the bitmap as an image file
+        File imageFile = saveBitmapAsImage(bitmap);
 
-            // Draw the bitmap on the PDF page
-            Canvas canvas = page.getCanvas();
-            Paint paint = new Paint();
-            paint.setColor(android.graphics.Color.WHITE);
-            canvas.drawPaint(paint);
-            canvas.drawBitmap(bitmap, 0, 0, null);
-
-            // Finish the page
-            pdfDocument.finishPage(page);
-
-            // Save the PDF file
-            File pdfFile = savePDF(pdfDocument);
-
-            // Share the PDF file
-            if (pdfFile != null) {
-                sharePDF(pdfFile);
-            } else {
-                Toast.makeText(requireContext(), "Error creating PDF", Toast.LENGTH_SHORT).show();
-            }
-
-            // Close the PDF document
-            pdfDocument.close();
+        // Share the image file
+        if (imageFile != null) {
+            shareImage(imageFile);
+        } else {
+            Toast.makeText(requireContext(), "Error creating image", Toast.LENGTH_SHORT).show();
         }
+    }
 
-        // Method to create a bitmap from a view
-        private Bitmap createBitmapFromView (View view){
-            // Get the width and height of the view
-            int width = view.getWidth();
-            int height = view.getHeight();
+    // Method to create a bitmap from a view
+    private Bitmap createBitmapFromView(View view) {
+        // Get the width and height of the view
+        int width = view.getWidth();
+        int height = view.getHeight();
 
-            // Create a bitmap with the same width and height as the view
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        // Create a bitmap with the same width and height as the view
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
-            // Create a canvas with the bitmap
-            Canvas canvas = new Canvas(bitmap);
+        // Create a canvas with the bitmap
+        Canvas canvas = new Canvas(bitmap);
 
-            // Draw the view onto the canvas
-            view.draw(canvas);
+        // Draw the view onto the canvas
+        view.draw(canvas);
 
-            return bitmap;
+        return bitmap;
+    }
+
+    // Method to save the bitmap as an image file
+    private File saveBitmapAsImage(Bitmap bitmap) {
+        // Create a file to save the image
+        File imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "overview_image.jpg");
+
+        try {
+            // Create a file output stream
+            FileOutputStream outputStream = new FileOutputStream(imageFile);
+
+            // Compress the bitmap as JPEG format and write it to the output stream
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            // Close the output stream
+            outputStream.close();
+
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
+    }
 
-        // Method to save the PDF file
-        private File savePDF (PdfDocument pdfDocument){
-            // Create a file to save the PDF
-            File pdfFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "overview.pdf");
-
-            try {
-                // Create a file output stream
-                FileOutputStream outputStream = new FileOutputStream(pdfFile);
-
-                // Write the PDF document to the output stream
-                pdfDocument.writeTo(outputStream);
-
-                // Close the output stream
-                outputStream.close();
-
-                return pdfFile;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        private void sharePDF (File file){
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("application/pdf");
-            Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", file);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            startActivity(Intent.createChooser(intent, "Share PDF"));
-        }
+    // Method to share the image file
+    private void shareImage(File file) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        Uri uri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".fileprovider", file);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share Image"));
+    }
 
         private Bitmap getBitmapFromView (View view){
             Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);

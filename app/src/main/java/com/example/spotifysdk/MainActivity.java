@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        // Access the NavigationView from your layout
+
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
@@ -70,6 +73,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+// Access the header view of the NavigationView
+        View headerView = navigationView.getHeaderView(0);
+
+        // Find the ImageView and TextView inside the header view
+        ImageView imageView = headerView.findViewById(R.id.imageView);
+        TextView navNameTextView = headerView.findViewById(R.id.nav_name);
+        TextView subtitleTextView = headerView.findViewById(R.id.textView);
+
+        // Update the content of the ImageView and TextView
+        loadImageFromUrl(getProfile(), imageView); // Set your new image resource
+        navNameTextView.setText(getProfileName()); // Set the new name
+        subtitleTextView.setText("Drake's #1 Fan"); // Set the new subtitle
 
         //Top Artist Page
         String topArtistsData = getIntent().getStringExtra("topArtists");
