@@ -553,6 +553,7 @@ public class HomeFragment extends Fragment {
             for (int i = 0; i < topGenreTextViews.length; i++) {
                 topGenreTextViews[i].setText(topGenresArray.get(i));
             }
+
         }
 
     }
