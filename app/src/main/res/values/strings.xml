@@ -67,4 +67,9 @@
     <string name="sign_in">Sign In</string>
     <string name="back">Back</string>
     <string name="wrapped">Wrapped</string>
+    <string-array name="time_range">
+        <item>6 Months</item>
+        <item>1 Year</item>
+        <item>1 Month</item>
+    </string-array>
 </resources>

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Spinner;
 
 import com.example.spotifysdk.ui.settings.SettingsFragment;
 import com.spotify.sdk.android.auth.AuthorizationClient;
@@ -27,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Hashtable;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,7 +64,9 @@ public class MainActivity2 extends AppCompatActivity {
 
     private TextView tokenTextView, codeTextView, profileTextView;
 
+    private Hashtable<String, String> range_table = new Hashtable<>();
 
+    private Spinner range_spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +84,17 @@ public class MainActivity2 extends AppCompatActivity {
         Button back = findViewById(R.id.backBtnSpotify);
         Button loadBtn = (Button) findViewById((R.id.load_top_data));
 
+        //Initialize spinner
+        range_spinner = findViewById(R.id.range_spinner);
+
         getToken();
         onLoadDataClicked();
+
+
+        //Add values to HashTable
+        range_table.put("1 Year", "long_term");
+        range_table.put("6 Months", "medium_term");
+        range_table.put("1 Month", "short_term");
 
 
         // Set the click listeners for the buttons
@@ -185,15 +198,20 @@ public class MainActivity2 extends AppCompatActivity {
             //Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // Get string value from table;
+        String temp = range_spinner.getSelectedItem().toString();
+        temp = range_table.get(temp);
+
         // Create a request to get the user's top artists
         final Request topArtists = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/artists")
+                .url("https://api.spotify.com/v1/me/top/artists?time_range="+temp)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
         // Create a request to get the user's top tracks
         final Request topTracks = new Request.Builder()
-                .url("https://api.spotify.com/v1/me/top/tracks")
+                .url("https://api.spotify.com/v1/me/top/tracks?time_range="+temp)
                 .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
 
