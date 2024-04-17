@@ -17,16 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view4"
-        android:layout_width="408dp"
-        android:layout_height="109dp"
-        android:layout_marginTop="644dp"
-        android:background="#b0b2ff"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <View
         android:id="@+id/view6"
@@ -34,6 +25,7 @@
         android:layout_height="489dp"
         android:layout_marginTop="132dp"
         android:background="#b0b2ff"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.657"
         app:layout_constraintStart_toStartOf="parent"

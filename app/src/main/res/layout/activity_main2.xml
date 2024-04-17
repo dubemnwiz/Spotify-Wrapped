@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/token_text_view"
@@ -32,7 +33,24 @@
             android:background="@drawable/round_back_white10_20"
             android:orientation="vertical"
             android:padding="15dp"
-            android:visibility="invisible">
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/range_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/time_range"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/load_top_data"
+                android:layout_width="326dp"
+                android:layout_height="46dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="80dp"
+                android:text="Generate your wrapped"
+                android:textColor="#FFFFFF"
+                android:visibility="visible" />
 
             <Button
                 android:id="@+id/token_btn"
@@ -71,16 +89,6 @@
 
 
             <Button
-                android:id="@+id/load_top_data"
-                android:layout_width="326dp"
-                android:layout_height="46dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="80dp"
-                android:text="Generate your wrapped"
-                android:textColor="#FFFFFF"
-                android:visibility="invisible" />
-
-            <Button
                 android:id="@+id/profile_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,13 +111,6 @@
 
 
         </LinearLayout>
-
-        <Spinner
-            android:id="@+id/range_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/time_range"
-            android:visibility="invisible"/>
 
     </LinearLayout>
 

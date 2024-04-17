@@ -21,23 +21,6 @@
 
     </ImageView>
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="441dp"
-        android:layout_height="262dp"
-        android:layout_marginTop="504dp"
-        android:background="#2596be"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="446dp"
-        android:layout_height="137dp"
-        android:layout_marginBottom="64dp"
-        android:background="#2596be"
-        app:layout_constraintBottom_toTopOf="@+id/topalbum_image"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteX="-18dp" />
 
     <TextView
         android:id="@+id/tv_album"
@@ -47,7 +30,7 @@
         android:layout_marginBottom="76dp"
         android:text="TextView"
         android:textAlignment="center"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

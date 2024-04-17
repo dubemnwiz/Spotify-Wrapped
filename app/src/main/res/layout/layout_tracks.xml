@@ -75,12 +75,12 @@
         android:id="@+id/TopSongName1"
         android:layout_width="157dp"
         android:layout_height="75dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="92dp"
         android:text="TextView"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toEndOf="@+id/TopSongImage1"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -141,11 +141,12 @@
 
     <TextView
         android:id="@+id/TopSongName2"
-        android:layout_width="148dp"
-        android:layout_height="95dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="149dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="36dp"
         android:text="TextView"
+        android:textAlignment="textStart"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +187,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TopSongName4"
-        app:layout_constraintVertical_bias="0.622" />
+        app:layout_constraintVertical_bias="0.76" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

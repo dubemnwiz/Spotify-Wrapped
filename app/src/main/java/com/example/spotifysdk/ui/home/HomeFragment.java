@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -46,6 +47,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -98,6 +100,12 @@ public class HomeFragment extends Fragment {
         contentContainer.addView(tabContentView);
         try {
             updateOverviewUI(root);
+            if (isChristmas()) {
+                tabContentView.setBackgroundResource(R.drawable.cm_overview);
+            }
+            if (isHalloween()) {
+                tabContentView.setBackgroundResource(R.drawable.hall_overview);
+            }
         } catch (Exception e) {
 
         }
@@ -114,6 +122,7 @@ public class HomeFragment extends Fragment {
 
 
 
+
         //HomePagerAdapter adapter = new HomePagerAdapter(getFragmentManager());
         //viewPager.setAdapter(adapter);
 
@@ -126,9 +135,80 @@ public class HomeFragment extends Fragment {
                 try {
                     // Handle tab selection
                     int selectedPosition = tab.getPosition();
+
+
                     // Inflate layout for the selected tab
                     int layoutResId = tabLayouts[selectedPosition];
                     View tabContentView = inflater.inflate(layoutResId, container, false);
+
+                    switch (selectedPosition) {
+                        case 0: // Top Artist tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_overview);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_overview);
+                            }
+                            break;
+                        case 1: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_topartist);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_topartist);
+                            }
+                            break;
+                        case 2: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_topsongs);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_topsongs);
+                            }
+                            break;
+                        case 3: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_topgenres);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_topgenres);
+                            }
+                            break;
+                        case 4: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_topgenre);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_topgenre);
+                            }
+                            break;
+                        case 5: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_spot3);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_spot3);
+                            }
+                            break;
+                        case 6: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_spot2);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_spot2);
+                            }
+                            break;
+                        case 7: // Other tab
+                            if (isChristmas()) {
+                                tabContentView.setBackgroundResource(R.drawable.cm_recom);
+                            }
+                            if (isHalloween()) {
+                                tabContentView.setBackgroundResource(R.drawable.hall_recom);
+                            }
+                            break;
+                        // Add cases for other tabs
+                    }
+
                     // Replace current content with the new tab content
                     ViewGroup contentContainer = root.findViewById(R.id.content_container);
                     contentContainer.removeAllViews();
@@ -226,7 +306,18 @@ public class HomeFragment extends Fragment {
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
     }
-
+    private boolean isChristmas() {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return (month == Calendar.DECEMBER && day == 25 || month == Calendar.DECEMBER && day == 24);
+    }
+    private boolean isHalloween() {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return (month == Calendar.OCTOBER && day == 31);
+    }
 
 
     private void updateTopArtistUI(View root) {
@@ -434,8 +525,10 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (songLinks != null && songLinks.get(4) != null) {
+
                     playAudio(songLinks.get(4));
                 } else {
+
                     Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -444,10 +537,11 @@ public class HomeFragment extends Fragment {
         track3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (songLinks != null && songLinks.get(3) != null) {
-                    playAudio(songLinks.get(3));
-                } else {
+                if (songLinks == null || songLinks.size() < 4 || songLinks.get(3) == null) {
                     Toast.makeText(requireContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("tag22", "" + songLinks.get(3));
+                    playAudio(songLinks.get(3));
                 }
             }
         });
@@ -467,6 +561,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (songLinks != null && songLinks.get(1) != null) {
+                    Log.d("tag22", "" + songLinks.get(3));
                     playAudio(songLinks.get(1));
                 } else {
                     Toast.makeText(getContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();

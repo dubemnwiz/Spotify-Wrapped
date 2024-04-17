@@ -88,8 +88,9 @@ public class MainActivity2 extends AppCompatActivity {
         range_spinner = findViewById(R.id.range_spinner);
 
         getToken();
-        onLoadDataClicked();
+        //onLoadDataClicked();
 
+        String selectedTimeSpan = getIntent().getStringExtra("TIME_SPAN");
 
         //Add values to HashTable
         range_table.put("1 Year", "long_term");
@@ -164,12 +165,15 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Check which request code is present (if any)
         if (AUTH_TOKEN_REQUEST_CODE == requestCode) {
+
             if (response != null && response.getAccessToken() != null && !response.getAccessToken().isEmpty()) {
                 mAccessToken = response.getAccessToken();
                 //setTextAsync(successfulLogin, tokenTextView);
                 onLoadDataClicked();
+
                 Intent intent = new Intent(MainActivity2.this, MainActivity.class);
                 startActivity(intent);
+
             } else {
                 Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
                 startActivity(intent);
@@ -177,9 +181,12 @@ public class MainActivity2 extends AppCompatActivity {
         } else if (AUTH_CODE_REQUEST_CODE != requestCode) {
             if (response != null && response.getCode() != null && !response.getCode().isEmpty()) {
                 mAccessCode = response.getCode();
+
                 setTextAsync(mAccessCode, codeTextView);
                 Intent intent = new Intent(MainActivity2.this, MainActivity.class);
                 startActivity(intent);
+
+
             } else {
                 Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
                 startActivity(intent);
@@ -199,9 +206,13 @@ public class MainActivity2 extends AppCompatActivity {
             return;
         }
 
+        String selectedTimeSpan = getIntent().getStringExtra("TIME_SPAN");
+        if (selectedTimeSpan == null) {
+            selectedTimeSpan = "6 Months";
+        }
         // Get string value from table;
-        String temp = range_spinner.getSelectedItem().toString();
-        temp = range_table.get(temp);
+        String temp = range_table.get(selectedTimeSpan);
+        Log.d("range", "Range: " + temp);
 
         // Create a request to get the user's top artists
         final Request topArtists = new Request.Builder()
@@ -248,6 +259,24 @@ public class MainActivity2 extends AppCompatActivity {
                 try {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
+                    if (artistsData == null || artistJsonObject.getJSONArray("items").isNull(0)) {
+                        Intent intent = new Intent(MainActivity2.this, MainActivity2.class);
+                        startActivity(intent);
+                        finish();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity2.this, "You do not have enough data for this time span!",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                        Log.d("Test35", "onResponse: Null data");
+                        //Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                        //startActivity(intent);
+                        return;
+                    }
+                    Log.d("Test35", "onResponse: " + artistsData);
                     seeds = fetchArtistsSeeds(artistsData);
                     relatedArtists(seeds);
                     fetchTracks(topTracks, artistsData, profileData, URIData, recsData);
@@ -284,9 +313,6 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
-
-
-
 
 
     }
@@ -484,7 +510,19 @@ public class MainActivity2 extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.d("seeds", "fetchArtistsSeeds: " + seeds.toString());
-        return seeds.get(0);
+        if (!seeds.isEmpty()) {
+            return seeds.get(0);
+        } else {
+            /*
+            Toast.makeText(MainActivity2.this, "Failed to parse data, watch Logcat for more details",
+                    Toast.LENGTH_SHORT).show();
+            //Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+            //startActivity(intent);
+
+             */
+
+            return "null";
+        }
     }
 
     public String getSeeds() {
@@ -508,7 +546,27 @@ public class MainActivity2 extends AppCompatActivity {
      * Puts the data from the API calls into the profile activity for parsing
      * The JSON is currently in the form of a String (Not JSONObject)
      */
-    private void startMainActivity(String artistsData, String tracksData, String data, String recsData) {
+    private void startMainActivity(String artistsData, String tracksData, String data, String recsData) throws JSONException {
+        JSONObject test2 = new JSONObject(artistsData);
+        JSONArray itemsArray = test2.getJSONArray("items");
+        Log.d("test35", "on: " + itemsArray);
+        if (itemsArray.isNull(0)) {
+            Intent intent = new Intent(MainActivity2.this, MainActivity2.class);
+            startActivity(intent);
+            finish();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity2.this, "You do not have enough data for this time span!",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            });
+            Log.d("Test35", "onResponse: Null data");
+            //Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+            //startActivity(intent);
+            return;
+        }
         String test = relatedArtists(seeds);
         Log.d("JSON", "Test: " + test);
         Intent intent = new Intent(MainActivity2.this, MainActivity.class);
