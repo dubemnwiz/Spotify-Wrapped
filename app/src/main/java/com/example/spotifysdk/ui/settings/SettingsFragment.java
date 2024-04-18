@@ -49,7 +49,7 @@ public class SettingsFragment extends Fragment {
     private boolean isDialogShown = false;
 
     private static final String PREF_TIME_SPAN = "pref_time_span";
-    private SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     private Spinner spinner;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -184,6 +184,8 @@ public class SettingsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 
     public void onSpotifyConnectClicked(View view) {
         Intent intent = new Intent(getActivity(), MainActivity2.class);

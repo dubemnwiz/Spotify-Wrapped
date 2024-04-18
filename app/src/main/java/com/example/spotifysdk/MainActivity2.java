@@ -2,6 +2,9 @@ package com.example.spotifysdk;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
@@ -67,6 +70,7 @@ public class MainActivity2 extends AppCompatActivity {
     private Hashtable<String, String> range_table = new Hashtable<>();
 
     private Spinner range_spinner;
+    Boolean cantRun = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,10 +209,24 @@ public class MainActivity2 extends AppCompatActivity {
             //Toast.makeText(this, "You need to login to your Spotify first!", Toast.LENGTH_SHORT).show();
             return;
         }
+        //Log.d("test55", "onLoadDataClicked: " + SettingsFragment.getTime());
+        // Access SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        // Retrieve the time span preference with a default value of ""
+        String test = sharedPreferences.getString("pref_time_span", "");
+
 
         String selectedTimeSpan = getIntent().getStringExtra("TIME_SPAN");
-        if (selectedTimeSpan == null) {
+        if (!test.equals("") && !(selectedTimeSpan == null)) {
+            selectedTimeSpan = test;
+        } else if (!test.equals("")) {
+            selectedTimeSpan = test;
+        } else {
             selectedTimeSpan = "6 Months";
+            sharedPreferences.edit().putString("pref_time_span", selectedTimeSpan).apply();
+            cantRun = false;
+            Log.d("test55", "" + cantRun);
         }
         // Get string value from table;
         String temp = range_table.get(selectedTimeSpan);
@@ -260,12 +278,15 @@ public class MainActivity2 extends AppCompatActivity {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
                     if (artistsData == null || artistJsonObject.getJSONArray("items").isNull(0)) {
+                        cantRun = true;
+                        Log.d("test55", "OnResponse" + cantRun);
                         Intent intent = new Intent(MainActivity2.this, MainActivity2.class);
                         startActivity(intent);
                         finish();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 Toast.makeText(MainActivity2.this, "You do not have enough data for this time span!",
                                         Toast.LENGTH_SHORT).show();
 
