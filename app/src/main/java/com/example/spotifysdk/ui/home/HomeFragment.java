@@ -514,7 +514,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 if (songLinks != null && songLinks.get(0) != null) {
                     playAudio(songLinks.get(0));
-                    Log.d("tag22", "onClick: Nothing");
                 } else {
                     Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
                 }
@@ -525,10 +524,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (songLinks != null && songLinks.get(4) != null) {
-
                     playAudio(songLinks.get(4));
                 } else {
-
                     Toast.makeText(getActivity(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -549,9 +546,11 @@ public class HomeFragment extends Fragment {
         track4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (songLinks != null && songLinks.get(2) != null) {
+                if (songLinks.get(2) != null) {
                     playAudio(songLinks.get(2));
+                    Log.d("tag88", "onClick: " + songLinks);
                 } else {
+                    Log.d("tag88", "onClick: Nothing");
                     Toast.makeText(getContext(), "Song playback is not available.", Toast.LENGTH_SHORT).show();
                 }
             }

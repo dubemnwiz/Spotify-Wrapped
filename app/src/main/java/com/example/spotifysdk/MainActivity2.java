@@ -70,7 +70,7 @@ public class MainActivity2 extends AppCompatActivity {
     private Hashtable<String, String> range_table = new Hashtable<>();
 
     private Spinner range_spinner;
-    Boolean cantRun = false;
+    Boolean cantRun = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -218,16 +218,21 @@ public class MainActivity2 extends AppCompatActivity {
 
 
         String selectedTimeSpan = getIntent().getStringExtra("TIME_SPAN");
-        if (!test.equals("") && !(selectedTimeSpan == null)) {
+        if (!cantRun) {
+            selectedTimeSpan = "6 Months";
+            sharedPreferences.edit().putString("pref_time_span", selectedTimeSpan).apply();
+            Log.d("test55", "Reset Case 1: " + test);
+        }else if (!test.equals("")) {
             selectedTimeSpan = test;
-        } else if (!test.equals("")) {
-            selectedTimeSpan = test;
+            Log.d("test55", "Reset Case 2: " + test);
+            Log.d("Test55", "onCase2: "+ cantRun);
         } else {
             selectedTimeSpan = "6 Months";
             sharedPreferences.edit().putString("pref_time_span", selectedTimeSpan).apply();
-            cantRun = false;
-            Log.d("test55", "" + cantRun);
+            cantRun = true;
+            Log.d("test55", "Reset Case 3: " + test);
         }
+        cantRun = true;
         // Get string value from table;
         String temp = range_table.get(selectedTimeSpan);
         Log.d("range", "Range: " + temp);
@@ -278,11 +283,14 @@ public class MainActivity2 extends AppCompatActivity {
                     final JSONObject artistJsonObject = new JSONObject(response.body().string());
                     artistsData = artistJsonObject.toString();
                     if (artistsData == null || artistJsonObject.getJSONArray("items").isNull(0)) {
-                        cantRun = true;
-                        Log.d("test55", "OnResponse" + cantRun);
+                        cantRun = false;
+                        onLoadDataClicked();
+                        /*
                         Intent intent = new Intent(MainActivity2.this, MainActivity2.class);
                         startActivity(intent);
                         finish();
+
+                         */
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -292,7 +300,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                             }
                         });
-                        Log.d("Test35", "onResponse: Null data");
+
                         //Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
                         //startActivity(intent);
                         return;
