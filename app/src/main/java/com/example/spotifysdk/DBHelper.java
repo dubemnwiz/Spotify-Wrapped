@@ -16,12 +16,17 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase myDB) {
         myDB.execSQL("create Table users(username TEXT primary key, password TEXT)");
+        // Create wraps table
+        myDB.execSQL("create Table wraps(id INTEGER primary key autoincrement, date TEXT, spotify_wrap_id TEXT, username TEXT, FOREIGN KEY(username) REFERENCES users(username))");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase myDB, int oldVersion, int newVersion) {
         myDB.execSQL("drop Table if exists users");
+        myDB.execSQL("drop Table if exists wraps");
+        onCreate(myDB);
     }
+
     public Boolean insertData(String username, String password) {
         SQLiteDatabase myDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -92,5 +97,22 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select * from users", null);
         return cursor;
+    }
+
+    // Insert wrap associated with a user
+    public boolean insertWrap(String username, String date, String spotifyWrapId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("date", date);
+        contentValues.put("spotify_wrap_id", spotifyWrapId);
+        contentValues.put("username", username);
+        long result = db.insert("wraps", null, contentValues);
+        return result != -1;
+    }
+
+    // Get wraps associated with a user
+    public Cursor getWraps(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM wraps WHERE username = ?", new String[]{username});
     }
 }

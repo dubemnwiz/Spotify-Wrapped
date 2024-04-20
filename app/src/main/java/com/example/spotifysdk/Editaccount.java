@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.widget.ToggleButton;
 
 import com.example.spotifysdk.databinding.ActivityMainBinding;
+import com.example.spotifysdk.ui.settings.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 public class Editaccount extends AppCompatActivity {
@@ -43,7 +44,9 @@ public class Editaccount extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        Navigation.findNavController(view).navigate(R.id.nav_slideshow);
+                                        Intent intent = new Intent(Editaccount.this, MainActivity2.class);
+                                        startActivity(intent);
+                                        //Navigation.findNavController(view).navigate(R.id.nav_slideshow);
                                     }
                                 }
         );

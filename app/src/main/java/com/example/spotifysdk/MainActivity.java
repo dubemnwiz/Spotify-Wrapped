@@ -470,6 +470,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return artistImageUrls;
     }
+    public String getUsername() {
+        String username = getIntent().getStringExtra("username");
+        return username;
+    }
 
 
 }

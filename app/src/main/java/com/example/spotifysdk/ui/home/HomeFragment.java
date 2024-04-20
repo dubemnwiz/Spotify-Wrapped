@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.spotifysdk.DBHelper;
 import com.example.spotifysdk.Editaccount;
 import com.example.spotifysdk.HomePagerAdapter;
 import com.example.spotifysdk.MainActivity;
@@ -36,6 +37,7 @@ import com.example.spotifysdk.R;
 import com.example.spotifysdk.SpotifyProfile;
 import com.example.spotifysdk.SpotifyWrappedDbHelper;
 import com.example.spotifysdk.databinding.FragmentHomeBinding;
+import com.example.spotifysdk.ui.gallery.GalleryFragment;
 import com.example.spotifysdk.ui.gallery.IconDateItem;
 import com.example.spotifysdk.ui.gallery.SharedViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -271,6 +273,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 generateAndShareImage(root);
+
             }
         });
         Button saveButton = root.findViewById(R.id.save);
@@ -281,9 +284,16 @@ public class HomeFragment extends Fragment {
 
             // Create new IconDateItem
             IconDateItem newItem = new IconDateItem(R.drawable.spotify_icon, currentDate);
-            updateDatabase();
+
+
+            MainActivity mainActivity = (MainActivity) requireActivity();
+            String username = mainActivity.getUsername();
+            Log.d("tag99", "HomeFrag: " + username);
+            updateDatabase(username, "test", currentDate);
             // Add to ViewModel
             viewModel.addIconItem(newItem);
+            //insertViewModelItemIntoDB(currentDate);
+            //dbHelper.deleteAllSavedWraps(username);
         });
         viewModel.imageClicked.observe(getViewLifecycleOwner(), clicked -> {
             if (clicked) {
@@ -291,6 +301,8 @@ public class HomeFragment extends Fragment {
             }
         });
         isClicked = false;
+
+        //dbHelper.deleteAllSavedWraps("c");
 
         return root;
     }
@@ -302,6 +314,19 @@ public class HomeFragment extends Fragment {
     }
     public void addOnTabSelectedListener (TabLayout.OnTabSelectedListener listener) {
 
+    }
+    private void insertViewModelItemIntoDB(String currentDate) {
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String username = mainActivity.getUsername();
+
+        // Example: Inserting a ViewModel item associated with the current user
+        boolean inserted = dbHelper.insertViewModelItem(username, "test",  currentDate);
+
+        if (inserted) {
+            Log.d("tag99", "ViewModel item inserted into database successfully.");
+        } else {
+            Log.e("tag99", "Failed to insert ViewModel item into database.");
+        }
     }
     private void loadImageFromUrl(String imageUrl, ImageView view) {
         Picasso.get().load(imageUrl).into(view);
@@ -762,9 +787,16 @@ public class HomeFragment extends Fragment {
         topAlbumArray = mainActivity.fetchTopAlbum();
         if (isClicked) {
             topAlbumArray.clear();
+            int id;
             // Retrieving data from Albums table
-            Cursor albumCursor = dbHelper.getAllAlbums();
-            if (albumCursor.moveToFirst()) {
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
+            Log.d("tag99", "updateTopAlbum: " + GalleryFragment.viewModelId);
+            Cursor albumCursor = dbHelper.getAllAlbums(id);
+            if (albumCursor != null && albumCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String albumName = albumCursor.getString(albumCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String albumImageUrl = albumCursor.getString(albumCursor.getColumnIndex("image_url"));
@@ -829,7 +861,7 @@ public class HomeFragment extends Fragment {
             Log.d("JSON", "Null Images or insufficient images");
         }
     }
-    private void updateDatabase() {
+    private void updateDatabase(String username, String itemName, String date) {
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topArtistsArray = mainActivity.fetchTop5Artists();
         List<String> topSongsArray = mainActivity.parseTop5Songs();
@@ -843,6 +875,8 @@ public class HomeFragment extends Fragment {
             dbHelper.insertGenre(topGenresArray.get(i), topGenresImagesArray.get(i));
         }
         dbHelper.insertAlbum(topAlbumsArray.get(0), topAlbumsArray.get(1));
+
+        dbHelper.insertViewModelItem(username, itemName, date);
     }
     private void generateAndShareImage(View rootView) {
         // Create a bitmap from the view of the overview tab

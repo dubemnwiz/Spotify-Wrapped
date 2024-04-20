@@ -3,6 +3,8 @@ package com.example.spotifysdk.ui.gallery;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -31,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.spotifysdk.LoginActivity2;
 import com.example.spotifysdk.R;
+import com.example.spotifysdk.SpotifyWrappedDbHelper;
 import com.example.spotifysdk.databinding.FragmentGalleryBinding;
 import com.example.spotifysdk.MainActivity;
 import com.example.spotifysdk.MainActivity2;
@@ -48,6 +51,7 @@ public class GalleryFragment extends Fragment {
     private GalleryAdapter adapter; // For the adapter
     private List<GalleryItem> galleryItems = new ArrayList<>();
     public static Boolean imageClicked = false;
+    public static int viewModelId = -1;
 
    // public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
      //   super.onViewCreated(view, savedInstanceState);
@@ -79,29 +83,54 @@ public class GalleryFragment extends Fragment {
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) GridLayout galleryLayout = view.findViewById(R.id.galleryGridLayout);
 
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        viewModel.getIconItems().observe(getViewLifecycleOwner(), icons -> {
-            galleryLayout.removeAllViews(); // Clear existing views or adjust as needed
-            int rowCount = (int) Math.ceil(icons.size() / 3.0); // Assuming 3 columns
-            galleryLayout.setRowCount(icons.size() * 2);
-            for (IconDateItem item : icons) {
+        String username = "c"; // Replace with the actual username
+
+// Get ViewModel items associated with the current user
+        SpotifyWrappedDbHelper dbHelper = new SpotifyWrappedDbHelper(getContext());
+        Cursor cursor = dbHelper.getViewModelItems(username);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // Retrieve ViewModel item data from the cursor
+                @SuppressLint("Range") String date = cursor.getString(cursor.getColumnIndex("date")); // Change "date" to match your column name
+                //@SuppressLint("Range") String itemName = cursor.getString(cursor.getColumnIndex("item_name"));
+                // Retrieve the ID from the cursor
+                @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+
+                // You can retrieve other ViewModel item data similarly
+
+                // Create views for each ViewModel item
                 ImageView imageView = new ImageView(getContext());
-                imageView.setImageResource(item.getIconResId());
-
+                imageView.setImageResource(R.drawable.spotify_icon); // Use appropriate resource
                 // Optionally set layout parameters, scale type, etc., for imageView
-                imageView.setOnClickListener(v -> {
-                    viewModel.setImageClicked(true);
-                    Toast.makeText(getContext(), "Image clicked!", Toast.LENGTH_SHORT).show();
-                });
-                galleryLayout.addView(imageView);
 
-                // Create and add a TextView for the date
+                // Set unique ID as tag for the ImageView
+                imageView.setTag(id);
+
                 TextView dateTextView = new TextView(getContext());
-                dateTextView.setText(item.getDate());
+                dateTextView.setText(date);
                 // Optionally style the TextView
 
+                // Add views to the gallery layout
+                galleryLayout.addView(imageView);
                 galleryLayout.addView(dateTextView);
-            }
-        });
+
+                // Set click listener for imageView
+                imageView.setOnClickListener(v -> {
+                    viewModelId = (int) v.getTag();
+                    Log.d("tag99", "ID: " + (int) v.getTag());
+                    viewModel.setImageClicked(true);
+                    Toast.makeText(getContext(), "Past wrapped restored!", Toast.LENGTH_SHORT).show();
+                });
+
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        } else {
+            // Handle case when no ViewModel items found for the current user
+            // For example, display a message or hide the gallery
+            Toast.makeText(getContext(), "No past wraps found.", Toast.LENGTH_SHORT).show();
+        }
 //hi
         return view;
     }

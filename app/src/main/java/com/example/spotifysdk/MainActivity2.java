@@ -133,6 +133,10 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
+        Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+        String username = getIntent().getStringExtra("key_user");
+        intent.putExtra("username", username);
+
     }
 
     /**
@@ -215,6 +219,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Retrieve the time span preference with a default value of ""
         String test = sharedPreferences.getString("pref_time_span", "");
+
 
 
         String selectedTimeSpan = getIntent().getStringExtra("TIME_SPAN");
@@ -575,6 +580,7 @@ public class MainActivity2 extends AppCompatActivity {
      * Puts the data from the API calls into the profile activity for parsing
      * The JSON is currently in the form of a String (Not JSONObject)
      */
+
     private void startMainActivity(String artistsData, String tracksData, String data, String recsData) throws JSONException {
         JSONObject test2 = new JSONObject(artistsData);
         JSONArray itemsArray = test2.getJSONArray("items");
@@ -604,6 +610,9 @@ public class MainActivity2 extends AppCompatActivity {
         intent.putExtra("topTracks", tracksData);
         intent.putExtra("topTrackURI", URIData);
         intent.putExtra("topRecs", test);
+
+        String username = getIntent().getStringExtra("key_user");
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 
