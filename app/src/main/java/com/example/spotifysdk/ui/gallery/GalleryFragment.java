@@ -38,6 +38,7 @@ import com.example.spotifysdk.databinding.FragmentGalleryBinding;
 import com.example.spotifysdk.MainActivity;
 import com.example.spotifysdk.MainActivity2;
 import com.example.spotifysdk.ui.home.HomeFragment;
+import com.example.spotifysdk.ui.settings.SettingsFragment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,7 +84,7 @@ public class GalleryFragment extends Fragment {
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) GridLayout galleryLayout = view.findViewById(R.id.galleryGridLayout);
 
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        String username = "c"; // Replace with the actual username
+        String username = "m"; // Replace with the actual username
 
 // Get ViewModel items associated with the current user
         SpotifyWrappedDbHelper dbHelper = new SpotifyWrappedDbHelper(getContext());

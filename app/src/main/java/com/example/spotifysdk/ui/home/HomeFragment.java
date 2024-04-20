@@ -1,7 +1,9 @@
 package com.example.spotifysdk.ui.home;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -40,6 +42,7 @@ import com.example.spotifysdk.databinding.FragmentHomeBinding;
 import com.example.spotifysdk.ui.gallery.GalleryFragment;
 import com.example.spotifysdk.ui.gallery.IconDateItem;
 import com.example.spotifysdk.ui.gallery.SharedViewModel;
+import com.example.spotifysdk.ui.settings.SettingsFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
@@ -49,6 +52,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +70,7 @@ public class HomeFragment extends Fragment {
     List<String> topArtistsArray;
     List<String> topSongsArray;
     List<String> topImagesArray;
+    List<String> topArtistsImagesArray;
     List<String> topGenresArray;
     List<String> topAlbumArray;
     List<String> topGenresImagesArray;
@@ -279,18 +284,18 @@ public class HomeFragment extends Fragment {
         Button saveButton = root.findViewById(R.id.save);
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         saveButton.setOnClickListener(v -> {
-            // Get current date in desired format
-            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            String selectedTimeSpan = getSelectedTimeSpan();
+            String currentDate = selectedTimeSpan;
 
             // Create new IconDateItem
-            IconDateItem newItem = new IconDateItem(R.drawable.spotify_icon, currentDate);
-
+            IconDateItem newItem = new IconDateItem(R.drawable.spotify_icon, currentDate + "-" + "6 Months");
 
             MainActivity mainActivity = (MainActivity) requireActivity();
             String username = mainActivity.getUsername();
             Log.d("tag99", "HomeFrag: " + username);
             updateDatabase(username, "test", currentDate);
             // Add to ViewModel
+            Log.d("tag99", "newItem: " + newItem);
             viewModel.addIconItem(newItem);
             //insertViewModelItemIntoDB(currentDate);
             //dbHelper.deleteAllSavedWraps(username);
@@ -357,8 +362,16 @@ public class HomeFragment extends Fragment {
         if(isClicked) {
             // Retrieving data from Artists table
             topArtistsArray.clear();
-            Cursor artistCursor = dbHelper.getAllArtists();
-            if (artistCursor.moveToFirst()) {
+            topArtistsImagesArray.clear();
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
+            Cursor artistCursor = dbHelper.getAllArtists(id);
+            if (artistCursor != null && artistCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String artistName = artistCursor.getString(artistCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String artistImageUrl = artistCursor.getString(artistCursor.getColumnIndex("image_url"));
@@ -400,8 +413,15 @@ public class HomeFragment extends Fragment {
         topArtistsArray = mainActivity.fetchTop5Artists();
         if (isClicked) {
             topArtistsArray.clear();
-            Cursor artistCursor = dbHelper.getAllArtists();
-            if (artistCursor.moveToFirst()) {
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
+            Cursor artistCursor = dbHelper.getAllArtists(id);
+            if (artistCursor != null && artistCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String artistName = artistCursor.getString(artistCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String artistImageUrl = artistCursor.getString(artistCursor.getColumnIndex("image_url"));
@@ -440,14 +460,22 @@ public class HomeFragment extends Fragment {
         if (isClicked) {
             // Retrieving data from Songs table
             topSongsArray.clear();
-            Cursor songCursor = dbHelper.getAllSongs();
-            if (songCursor.moveToFirst()) {
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
+            Cursor songCursor = dbHelper.getAllSongs(id);
+            if (songCursor != null && songCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
                     // Add the retrieved data to songList
                     topSongsArray.add(songName);
                     topImagesArray.add(songImageUrl);
+                    Log.d("tag100", "Top Songs: " + topSongsArray.toString());
                 } while (songCursor.moveToNext());
             }
             songCursor.close();
@@ -492,9 +520,17 @@ public class HomeFragment extends Fragment {
         if (isClicked) {
             topSongsArray.clear();
             topImagesArray.clear();
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
             // Retrieving data from Songs table
-            Cursor songCursor = dbHelper.getAllSongs();
-            if (songCursor.moveToFirst()) {
+            Cursor songCursor = dbHelper.getAllSongs(id);
+            if (songCursor != null && songCursor.moveToFirst()) {
+
                 do {
                     @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
@@ -643,11 +679,19 @@ public class HomeFragment extends Fragment {
         //TOP GENRES TAB
         MainActivity mainActivity = (MainActivity) requireActivity();
         topGenresArray = mainActivity.fetchTop5Genres();
+        Log.d("tag99", "originalTopGenres: " + topGenresArray.size());
         if (isClicked) {
             topGenresArray.clear();
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
             // Retrieving data from Genres table
-            Cursor genreCursor = dbHelper.getAllGenres();
-            if (genreCursor.moveToFirst()) {
+            Cursor genreCursor = dbHelper.getAllGenres(id);
+            if (genreCursor != null && genreCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
@@ -656,6 +700,8 @@ public class HomeFragment extends Fragment {
                 } while (genreCursor.moveToNext());
             }
             genreCursor.close();
+            Log.d("tag99", "updateTopGenres: " + topGenresArray.size());
+            Log.d("tag99", "Database Sizes " + dbHelper.getAllTableSizes(dbHelper));
         }
 // Text Views
         TextView[] topGenreTextViews = new TextView[] {
@@ -670,7 +716,7 @@ public class HomeFragment extends Fragment {
             try {
 
             } catch (Exception e) {
-                Log.d("JSON", "Error " + e);
+                Log.d("tag145", "Error " + e);
             }
             for (int i = 0; i < topGenreTextViews.length; i++) {
                 topGenreTextViews[i].setText(topGenresArray.get(i));
@@ -686,12 +732,20 @@ public class HomeFragment extends Fragment {
         topsong_image = root.findViewById(R.id.topsong_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
         topSongsArray = mainActivity.parseTop5Songs();
+        topImagesArray = mainActivity.fetchTopSongsImages();
         if (isClicked) {
             topSongsArray.clear();
             topImagesArray.clear();
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
             // Retrieving data from Songs table
-            Cursor songCursor = dbHelper.getAllSongs();
-            if (songCursor.moveToFirst()) {
+            Cursor songCursor = dbHelper.getAllSongs(id);
+            if (songCursor != null && songCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
@@ -706,23 +760,7 @@ public class HomeFragment extends Fragment {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             tv_song.setText(topSongsArray.get(0));
         }
-        topImagesArray = mainActivity.fetchTopSongsImages();
-        if (isClicked) {
-            topSongsArray.clear();
-            topImagesArray.clear();
-            // Retrieving data from Songs table
-            Cursor songCursor = dbHelper.getAllSongs();
-            if (songCursor.moveToFirst()) {
-                do {
-                    @SuppressLint("Range") String songName = songCursor.getString(songCursor.getColumnIndex("name"));
-                    @SuppressLint("Range") String songImageUrl = songCursor.getString(songCursor.getColumnIndex("image_url"));
-                    // Add the retrieved data to songList
-                    topSongsArray.add(songName);
-                    topImagesArray.add(songImageUrl);
-                } while (songCursor.moveToNext());
-            }
-            songCursor.close();
-        }
+
         if (topImagesArray != null && !topImagesArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
             loadImageFromUrl(topImagesArray.get(0), topsong_image);
@@ -738,12 +776,19 @@ public class HomeFragment extends Fragment {
         tv_genre = root.findViewById(R.id.tv_genre);
         topgenre_image = root.findViewById(R.id.topgenre_image);
         MainActivity mainActivity = (MainActivity) requireActivity();
-        topSongsArray = mainActivity.fetchTop5Genres();
+        topGenresArray = mainActivity.fetchTop5Genres();
         if (isClicked) {
-            topSongsArray.clear();
+            topGenresArray.clear();
+            int id;
+            // Retrieving data from Albums table
+            if (GalleryFragment.viewModelId != -1) {
+                id = GalleryFragment.viewModelId;
+            } else {
+                id = 0;
+            }
             // Retrieving data from Genres table
-            Cursor genreCursor = dbHelper.getAllGenres();
-            if (genreCursor.moveToFirst()) {
+            Cursor genreCursor = dbHelper.getAllGenres(id);
+            if (genreCursor != null && genreCursor.moveToFirst()) {
                 do {
                     @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
                     @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
@@ -753,28 +798,13 @@ public class HomeFragment extends Fragment {
             }
             genreCursor.close();
         }
-        if (topSongsArray != null && !topSongsArray.isEmpty()) {
+        if (topGenresArray != null && !topGenresArray.isEmpty()) {
             //Log.d("JSON", "Top Songs " + topArtistsArray.get(0));
-            tv_genre.setText(topSongsArray.get(0));
+            tv_genre.setText(topGenresArray.get(0));
         }
         List<String> topGenreImageURL = mainActivity.fetchTopGenresImages();
-        if (isClicked) {
-            topGenresImagesArray.clear();
-            // Retrieving data from Genres table
-            Cursor genreCursor = dbHelper.getAllGenres();
-            if (genreCursor.moveToFirst()) {
-                do {
-                    @SuppressLint("Range") String genreName = genreCursor.getString(genreCursor.getColumnIndex("name"));
-                    @SuppressLint("Range") String genreImageUrl = genreCursor.getString(genreCursor.getColumnIndex("image_url"));
-                    // Add the retrieved data to genreList
-                    //topGenresArray.add(genreName);
-                    topGenresImagesArray.add(genreImageUrl);
-                } while (genreCursor.moveToNext());
-            }
-            genreCursor.close();
-        }
         if (topGenreImageURL != null) {
-            loadImageFromUrl(topGenreImageURL.get(0), topgenre_image);
+            loadImageFromUrl(topImagesArray.get(0), topgenre_image);
         }
 
     }
@@ -869,7 +899,7 @@ public class HomeFragment extends Fragment {
         List<String> topGenresArray = mainActivity.fetchTop5Genres();
         List<String> topSongsImagesArray = mainActivity.fetchTopSongsImages();
         List<String> topGenresImagesArray = mainActivity.fetchTopGenresImages();
-        for (int i = 0; i < topSongsArray.size(); i++) {
+        for (int i = 0; i < 5; i++) {
             dbHelper.insertSong(topSongsArray.get(i), topSongsImagesArray.get(i));
             dbHelper.insertArtist(topArtistsArray.get(i), mainActivity.fetchTopArtistImage());
             dbHelper.insertGenre(topGenresArray.get(i), topGenresImagesArray.get(i));
@@ -948,6 +978,17 @@ public class HomeFragment extends Fragment {
             view.draw(canvas);
             return bitmap;
         }
+
+    // Add this method to your HomeFragment class
+    private String getSelectedTimeSpan() {
+        // Get SharedPreferences instance
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        // Retrieve the selected time span with a default value of ""
+        String selectedTimeSpan = sharedPreferences.getString("pref_time_span", "");
+
+        return selectedTimeSpan;
+    }
 
 
 }

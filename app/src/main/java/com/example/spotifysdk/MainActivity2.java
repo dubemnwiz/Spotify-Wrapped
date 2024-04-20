@@ -241,6 +241,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Get string value from table;
         String temp = range_table.get(selectedTimeSpan);
         Log.d("range", "Range: " + temp);
+        // Save the selected time span to SharedPreferences
 
         // Create a request to get the user's top artists
         final Request topArtists = new Request.Builder()

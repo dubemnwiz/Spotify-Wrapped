@@ -47,10 +47,11 @@ public class SettingsFragment extends Fragment {
     private static final String IS_DARK = "isDark";
     private boolean isFirstSelection = true;
     private boolean isDialogShown = false;
+    public static boolean isRan = false;
 
     private static final String PREF_TIME_SPAN = "pref_time_span";
     public static SharedPreferences sharedPreferences;
-    private Spinner spinner;
+    private static Spinner spinner;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -107,6 +108,7 @@ public class SettingsFragment extends Fragment {
         String savedTimeSpan = sharedPreferences.getString(PREF_TIME_SPAN, "default_time_span");
         int position = getPositionForTimeSpan(savedTimeSpan);
         spinner.setSelection(position);
+        isRan = true;
         //spinner.setSelection(0);
 
         // Set an item selected listener to handle the selection
@@ -217,6 +219,11 @@ public class SettingsFragment extends Fragment {
         }else {
             Log.d("range", "shared: " + timeSpan);
             return 0; }
+    }
+    public static String getSelectedTimeSpan() {
+        // Get the selected item from the spinner
+        String selectedTimeSpan = (String) spinner.getSelectedItem();
+        return selectedTimeSpan;
     }
 
     /*

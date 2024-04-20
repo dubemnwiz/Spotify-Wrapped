@@ -141,19 +141,22 @@ public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Cursor getAllArtists() {
+    public Cursor getAllArtists(int artistsId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_ARTISTS, null);
+        return db.rawQuery("SELECT * FROM " + TABLE_ARTISTS + " WHERE " + COLUMN_ID + " = ?",
+                new String[]{String.valueOf(artistsId)});
     }
 
-    public Cursor getAllSongs() {
+    public Cursor getAllSongs(int songsId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_SONGS, null);
+        return db.rawQuery("SELECT * FROM " + TABLE_SONGS + " WHERE " + COLUMN_ID + " = ?",
+                new String[]{String.valueOf(songsId)});
     }
 
-    public Cursor getAllGenres() {
+    public Cursor getAllGenres(int genresId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_GENRES, null);
+        return db.rawQuery("SELECT * FROM " + TABLE_GENRES + " WHERE " + COLUMN_ID + " = ?",
+                new String[]{String.valueOf(genresId)});
     }
 
     public Cursor getAllAlbums(int albumId) {
@@ -191,5 +194,30 @@ public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
     public void deleteAllSavedWraps(String username) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_VIEWMODEL_ITEMS, COLUMN_USERNAME + " = ?", new String[]{username});
+    }
+    // Static method to get the size of a table
+    public int getTableSize(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count;
+        } else {
+            return 0;
+        }
+    }
+
+    // Static method to get the size of all tables
+    public String getAllTableSizes(SpotifyWrappedDbHelper dbHelper) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        StringBuilder sizes = new StringBuilder();
+
+        sizes.append("Table: ").append(TABLE_ARTISTS).append(", Size: ").append(getTableSize(db, TABLE_ARTISTS)).append("\n");
+        sizes.append("Table: ").append(TABLE_SONGS).append(", Size: ").append(getTableSize(db, TABLE_SONGS)).append("\n");
+        sizes.append("Table: ").append(TABLE_GENRES).append(", Size: ").append(getTableSize(db, TABLE_GENRES)).append("\n");
+        sizes.append("Table: ").append(TABLE_ALBUMS).append(", Size: ").append(getTableSize(db, TABLE_ALBUMS)).append("\n");
+
+        return sizes.toString();
     }
 }
