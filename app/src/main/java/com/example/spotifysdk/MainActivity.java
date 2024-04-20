@@ -329,6 +329,8 @@ public class MainActivity extends AppCompatActivity {
         return profileName;
     }
     public List<String> fetchTopSongsImages() {
+
+        
         List<String> topSongsImagesUrls = new ArrayList<>();
         try {
             // Extracting the JSON string from Intent extra
