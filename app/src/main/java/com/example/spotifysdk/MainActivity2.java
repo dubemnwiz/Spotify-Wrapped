@@ -136,6 +136,8 @@ public class MainActivity2 extends AppCompatActivity {
         Intent intent = new Intent(MainActivity2.this, MainActivity.class);
         String username = getIntent().getStringExtra("key_user");
         intent.putExtra("username", username);
+        Log.d("tag101", "onCreate: " + username);
+
 
     }
 
@@ -177,13 +179,18 @@ public class MainActivity2 extends AppCompatActivity {
             if (response != null && response.getAccessToken() != null && !response.getAccessToken().isEmpty()) {
                 mAccessToken = response.getAccessToken();
                 //setTextAsync(successfulLogin, tokenTextView);
+                Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                String username = getIntent().getStringExtra("key_user");
+                //intent.putExtra("username", username);
                 onLoadDataClicked();
 
-                Intent intent = new Intent(MainActivity2.this, MainActivity.class);
                 startActivity(intent);
 
             } else {
                 Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                String username = getIntent().getStringExtra("key_user");
+                //intent.putExtra("username", username);
+
                 startActivity(intent);
             }
         } else if (AUTH_CODE_REQUEST_CODE != requestCode) {
@@ -192,11 +199,15 @@ public class MainActivity2 extends AppCompatActivity {
 
                 setTextAsync(mAccessCode, codeTextView);
                 Intent intent = new Intent(MainActivity2.this, MainActivity.class);
+                String username = getIntent().getStringExtra("key_user");
+                //intent.putExtra("username", username);
                 startActivity(intent);
 
 
             } else {
                 Intent intent = new Intent(MainActivity2.this, LoginActivity2.class);
+                String username = getIntent().getStringExtra("key_user");
+                //intent.putExtra("username", username);
                 startActivity(intent);
             }
         }

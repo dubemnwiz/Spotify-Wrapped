@@ -59,7 +59,8 @@ public class LoginActivity extends AppCompatActivity {
                             Boolean insert = DB.insertData(user, pass);
                             if(insert == true) {
                                 Toast.makeText(LoginActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+                                intent.putExtra("key_user", user);
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(LoginActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();

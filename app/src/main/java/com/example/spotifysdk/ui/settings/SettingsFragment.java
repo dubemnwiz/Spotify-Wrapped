@@ -177,6 +177,9 @@ public class SettingsFragment extends Fragment {
         } else {
             Log.d("JSON", "Null Profile");
         }
+
+
+
         //username = getIntent().getStringExtra("key_user");
         return root;
     }
@@ -199,11 +202,16 @@ public class SettingsFragment extends Fragment {
     }
 
     private void handleItemSelected(String selectedTimeSpan) {
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String username = mainActivity.getUsername();
+        Log.d("tag101", "handleItemSelected: " + username);
         // Create an intent to start MainActivity2
         Intent intent = new Intent(getActivity(), MainActivity2.class);
 
+
         // Put the selected time span as an extra to the intent
         intent.putExtra("TIME_SPAN", selectedTimeSpan);
+        intent.putExtra("key_user", username);
 
         // Start MainActivity2 with the intent
         startActivity(intent);

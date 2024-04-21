@@ -3,7 +3,9 @@ package com.example.spotifysdk.ui.gallery;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -84,7 +86,8 @@ public class GalleryFragment extends Fragment {
         @SuppressLint({"MissingInflatedId", "LocalSuppress"}) GridLayout galleryLayout = view.findViewById(R.id.galleryGridLayout);
 
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        String username = "m"; // Replace with the actual username
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        String username = mainActivity.getUsername(); // Replace with the actual username
 
 // Get ViewModel items associated with the current user
         SpotifyWrappedDbHelper dbHelper = new SpotifyWrappedDbHelper(getContext());
