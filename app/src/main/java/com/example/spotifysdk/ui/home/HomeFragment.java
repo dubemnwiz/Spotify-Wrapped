@@ -249,7 +249,6 @@ public class HomeFragment extends Fragment {
                             break;
                     }
 
-
                 } catch (Exception e){
                     // Handle tab selection
                     int selectedPosition = tab.getPosition();
@@ -308,6 +307,7 @@ public class HomeFragment extends Fragment {
             if (clicked) {
                 isClicked = true;
             }
+            updateOverviewUI(root);
         });
         isClicked = false;
 
@@ -925,7 +925,11 @@ public class HomeFragment extends Fragment {
         }
     }
     private void updateDatabase(String username, String itemName, String date) {
-        long id = dbHelper.insertViewModelItem(username, itemName, date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd", Locale.getDefault());
+        Date date2 = new Date(System.currentTimeMillis());
+        String date3 = dateFormat.format(date2);
+        String dateSpan = date3 + " - Timespan: " + date;
+        long id = dbHelper.insertViewModelItem(username, itemName, dateSpan);
 
         MainActivity mainActivity = (MainActivity) requireActivity();
         List<String> topArtistsArray = mainActivity.fetchTop5Artists();

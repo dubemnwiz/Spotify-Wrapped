@@ -12,7 +12,7 @@ import java.util.Objects;
 public class SpotifyWrappedDbHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "spotifyWrapped.db";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     // Table Names
     private static final String TABLE_ARTISTS = "artists";
